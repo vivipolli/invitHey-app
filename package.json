@@ -30,16 +30,13 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
-  // "lint-staged": {
-  //   "*.{js,ts,tsx}": [
-  //     "eslint --quiet --fix"
-  //   ],
-  //   "*.{json,md,html}": [
-  //     "prettier --write"
-  //   ]
-  // }
+  "lint-staged": {
+    "*.js": [
+      "./node_modules/.bin/eslint --fix",
+      "git add"
+    ]
+  }
 }
