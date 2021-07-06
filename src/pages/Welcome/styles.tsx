@@ -18,7 +18,7 @@ export const Container = styled.View`
 
 `
 
-export const Actions = styled.View`
+export const Group = styled.View`
   width: 100%;
   align-items: center;
 

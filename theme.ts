@@ -15,10 +15,10 @@ export const theme: DefaultTheme = {
   },
   typography: {
     largeFont: '24px',
-    mediumFont: '20px',
+    mediumFont: '21px',
     smallFont: '16px',
-    smallestFont: '12px',
-    tinyFont: '10px',
+    smallestFont: '13px',
+    tinyFont: '8px',
     light: 'Jost_300Light',
     regular: 'Jost_400Regular',
     medium: 'Jost_500Medium',

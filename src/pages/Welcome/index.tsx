@@ -1,29 +1,32 @@
 import React, { ReactNode } from 'react';
 
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 import GlobalApp from '../../components/GlobalApp';
 import PrimaryBtn from '../../components/PrimaryBtn';
 
-import { LinkText, Text, Container, Actions } from './styles';
-import Logo from '../../assets/images/InvitHey.svg';
+import { LinkText, Text, Container, Group } from './styles';
+import LogoType from '../../assets/images/InvitHey.svg';
+import Logo from '../../assets/images/logo_baloon.svg';
 
 export default function Welcome() {
 
   return (
     <GlobalApp>
       <Container>
-        <Logo />
-        <Text>Olá! Seja bem vindo(a) ao InviteHey!
-          Aqui você escontra todo tipo de evento
-          que desejar.
+        <Group>
+          <Logo />
+          <LogoType />
+        </Group>
+        <Text>Olá! Seja bem vindo(a) ao InvitHey! Aqui você cria qualquer evento,
+              participa e convida seus amigos.
         </Text>
-        <Actions>
+        <Group>
           <PrimaryBtn isDefault>Sou novo(a)</PrimaryBtn>
           <TouchableOpacity>
             <LinkText>Já tenho uma conta</LinkText>
           </TouchableOpacity>
-        </Actions>
+        </Group>
       </Container>
     </GlobalApp>
   )
