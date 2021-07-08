@@ -12,7 +12,7 @@ export const Button = styled(TouchableOpacity)<ButtonProps>`
   elevation: 2;
   align-items: center;
   justify-content: center;
-  background-color: ${props => props.isDefault ? props.theme.colors?.primary : props.theme.colors?.softGray};
+  background-color: ${props => props.isDefault ? props.theme.colors?.primary : props.theme.colors?.white};
 `
 
 export const Text = styled.Text<ButtonProps>`

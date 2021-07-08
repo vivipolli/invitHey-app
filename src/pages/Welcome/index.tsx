@@ -8,8 +8,10 @@ import PrimaryBtn from '../../components/PrimaryBtn';
 import { LinkText, Text, Container, Group } from './styles';
 import LogoType from '../../assets/images/InvitHey.svg';
 import Logo from '../../assets/images/logo_baloon.svg';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Welcome() {
+  const navigation = useNavigation();
 
   return (
     <GlobalApp>
@@ -22,8 +24,8 @@ export default function Welcome() {
               participa e convida seus amigos.
         </Text>
         <Group>
-          <PrimaryBtn isDefault>Sou novo(a)</PrimaryBtn>
-          <TouchableOpacity>
+          <PrimaryBtn isDefault onPress={() => navigation.navigate('SignUp')} >Sou novo(a)</PrimaryBtn>
+          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <LinkText>Já tenho uma conta</LinkText>
           </TouchableOpacity>
         </Group>

@@ -13,7 +13,7 @@ export const Container = styled.View`
 export const MaskedInput = styled(TextInputMask)<InputProps>`
   height: 50px;
   width: 100%;
-  border-radius: 15px;
+  border-radius: 8px;
   border-width: 1px;
   border-color: ${props => props.error ? props.theme.colors.red : props.theme.colors.lineGray};
   padding-left: 15px;
@@ -22,8 +22,8 @@ export const MaskedInput = styled(TextInputMask)<InputProps>`
 export const Input = styled(TextInput)<InputProps>`
   height: 50px;
   width: 100%;
-  border-radius: 15px;
-  border-bottom: 1px;
+  border-radius: 8px;
+  border-width: 1px;
   border-color: ${props => props.error ? props.theme.colors.red : props.theme.colors.textGray};
   padding-left: 15px;
 `

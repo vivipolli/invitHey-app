@@ -2,16 +2,19 @@ import React, { ReactNode, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
 import GlobalApp from '../../components/GlobalApp';
 import PrimaryBtn from '../../components/PrimaryBtn';
 import TextInput from '../../components/TextInput';
 
-import { LinkText, Text, Container, Group } from './styles';
 import LogoType from '../../assets/images/InvitHey.svg';
 import TextButton from '../../components/TextButton';
+import { Container, Form, Group, Span } from './styles';
 
 export default function SignIn() {
+  const navigation = useNavigation();
+
   const { control, handleSubmit, formState: { errors } } = useForm();
 
   function onSubmit(data: any) {
@@ -22,48 +25,66 @@ export default function SignIn() {
   return (
     <GlobalApp>
       <Container>
-        <Group>
-          <LogoType />
-        </Group>
-        <Controller
-          control={control}
-          rules={{ required: true }}
-          name="email"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Email"
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              value={value}
-              error={errors.email?.type === 'required'}
-            />
-          )}
-        />
-        <Controller
-          control={control}
-          rules={{ required: true }}
-          name="password"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Senha"
-              onBlur={onBlur}
-              onChangeText={value => onChange(value)}
-              value={value}
-              error={errors.password?.type === 'required'}
-            />
-          )}
-        />
-        <Group>
+        <LogoType />
+        <Form>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="email"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Email"
+                onBlur={onBlur}
+                onChangeText={value => onChange(value)}
+                value={value}
+                error={errors.email?.type === 'required'}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Senha"
+                onBlur={onBlur}
+                onChangeText={value => onChange(value)}
+                value={value}
+                error={errors.password?.type === 'required'}
+              />
+            )}
+          />
+          <Group marginTop={20}>
+            <PrimaryBtn
+              onPress={handleSubmit(onSubmit)}
+              isDefault >
+              Entrar
+            </PrimaryBtn>
+            <TouchableOpacity activeOpacity={0.8}>
+              <Span>Esqueci minha senha</Span>
+            </TouchableOpacity>
+          </Group>
+        </Form>
+
+        {/* <Group>
           <PrimaryBtn
             onPress={handleSubmit(onSubmit)}
-            isDefault >
-            Entrar
+            isDefault={false} >
+            Google
           </PrimaryBtn>
-          <TextButton
-            onPress={() => { }}
-            textToInfo="Não é registrado?"
-            textToPress="Registrar-se" />
-        </Group>
+
+          <PrimaryBtn
+            onPress={handleSubmit(onSubmit)}
+            isDefault={false} >
+            Facebook
+          </PrimaryBtn>
+        </Group> */}
+
+        <TextButton
+          onPress={() => navigation.navigate('SignUp')}
+          textToInfo="Não é registrado?"
+          textToPress="Registrar-se" />
       </Container>
     </GlobalApp>
   )

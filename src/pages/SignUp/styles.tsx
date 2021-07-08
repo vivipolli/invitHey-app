@@ -6,15 +6,11 @@ type GroupProps = {
 }
 
 
-export const Logo = styled.Image`
-
-`
-
 export const Container = styled.View`
   flex: 1;
   justify-content: space-around;
   align-items: center;
-  padding: 20px;
+  padding: 10px;
 
 `
 
@@ -29,14 +25,19 @@ export const Group = styled.View<GroupProps>`
 
 `
 
-export const Span = styled.Text`
+export const Row = styled.View`
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+`
+
+export const Title = styled.Text`
   text-align: center;
-  margin-top: 21px;
   ${(props) => {
     return `
-      color: ${props.theme.colors.softGray};
-      font-size: ${props.theme.typography.smallestFont};
-      font-family: ${props.theme.typography.regular};
+      color: ${props.theme.colors.darkGray};
+      font-size: ${props.theme.typography.mediumFont};
+      font-family: ${props.theme.typography.bold};
     `
   }}
 

@@ -10,7 +10,7 @@ interface TextButtonProps {
 
 export default function TextButton({ textToPress, textToInfo, onPress }: TextButtonProps) {
   return (
-    <Container onPress={onPress}>
+    <Container onPress={onPress} activeOpacity={0.5}>
       <Text>
         {textToInfo}
       </Text>
