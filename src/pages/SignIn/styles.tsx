@@ -26,7 +26,10 @@ export const Form = styled.View`
 export const Group = styled.View<GroupProps>`
   width: 100%;
   margin-top: ${props => props.marginTop || 0}px;
+`
 
+export const SocialButton = styled.View`
+  margin: 20px 0;
 `
 
 export const Span = styled.Text`
@@ -37,6 +40,17 @@ export const Span = styled.Text`
       color: ${props.theme.colors.softGray};
       font-size: ${props.theme.typography.smallestFont};
       font-family: ${props.theme.typography.regular};
+    `
+  }}
+
+`
+export const BoldSpan = styled.Text`
+  text-align: center;
+  ${(props) => {
+    return `
+      color: ${props.theme.colors.softGray};
+      font-size: ${props.theme.typography.smallestFont};
+      font-family: ${props.theme.typography.bold};
     `
   }}
 

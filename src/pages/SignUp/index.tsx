@@ -2,6 +2,7 @@ import React, { ReactNode, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
+import { useNavigation } from '@react-navigation/native';
 
 import GlobalApp from '../../components/GlobalApp';
 import PrimaryBtn from '../../components/PrimaryBtn';
@@ -12,6 +13,8 @@ import TextButton from '../../components/TextButton';
 import { Container, Form, Group, Row, Title } from './styles';
 
 export default function SignUp() {
+  const navigation = useNavigation();
+
   const { control, handleSubmit, formState: { errors } } = useForm();
 
   function onSubmit(data: any) {
@@ -22,9 +25,8 @@ export default function SignUp() {
   return (
     <GlobalApp>
       <Container>
-        <LogoType />
-        <Title>Registrar-se</Title>
         <Form>
+          <Title>Registrar-se</Title>
           <Controller
             control={control}
             rules={{ required: true }}
@@ -61,6 +63,7 @@ export default function SignUp() {
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
                   label="Senha"
+                  secureTextEntry
                   onBlur={onBlur}
                   onChangeText={value => onChange(value)}
                   value={value}
@@ -77,6 +80,7 @@ export default function SignUp() {
                 <TextInput
                   label="Repita a senha"
                   onBlur={onBlur}
+                  secureTextEntry
                   onChangeText={value => onChange(value)}
                   value={value}
                   error={errors.confirmPwd?.type === 'required'}
@@ -119,12 +123,12 @@ export default function SignUp() {
               isDefault >
               Criar conta
             </PrimaryBtn>
-            <TextButton
-              onPress={() => { }}
-              textToInfo="Já tem uma conta?"
-              textToPress="Entrar" />
           </Group>
         </Form>
+        <TextButton
+          onPress={() => navigation.navigate('SignIn')}
+          textToInfo="Já tem uma conta?"
+          textToPress="Entrar" />
       </Container>
     </GlobalApp>
   )

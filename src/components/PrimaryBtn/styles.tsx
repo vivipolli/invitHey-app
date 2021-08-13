@@ -11,7 +11,9 @@ export const Button = styled(TouchableOpacity)<ButtonProps>`
   border-radius: 10px;
   elevation: 2;
   align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  padding: ${props=>  props.isDefault ? '0' : '0 40px'};
+  justify-content: ${props=>  props.isDefault ? 'center' : 'space-around'};
   background-color: ${props => props.isDefault ? props.theme.colors?.primary : props.theme.colors?.white};
 `
 

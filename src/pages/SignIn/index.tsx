@@ -9,8 +9,11 @@ import PrimaryBtn from '../../components/PrimaryBtn';
 import TextInput from '../../components/TextInput';
 
 import LogoType from '../../assets/images/InvitHey.svg';
+import GoogleSvg from '../../assets/icons/google.svg';
+import FacebookSvg from '../../assets/icons/facebook.svg';
+
 import TextButton from '../../components/TextButton';
-import { Container, Form, Group, Span } from './styles';
+import { BoldSpan, Container, Form, Group, SocialButton, Span } from './styles';
 
 export default function SignIn() {
   const navigation = useNavigation();
@@ -67,25 +70,32 @@ export default function SignIn() {
           </Group>
         </Form>
 
-        {/* <Group>
-          <PrimaryBtn
-            onPress={handleSubmit(onSubmit)}
-            isDefault={false} >
-            Google
-          </PrimaryBtn>
+
+        <Group>
+          <BoldSpan>OU</BoldSpan>
+
+          <SocialButton>
+            <PrimaryBtn
+              onPress={handleSubmit(onSubmit)}
+              icon={<GoogleSvg />}
+              isDefault={false} >
+              Entrar com Google
+            </PrimaryBtn>
+          </SocialButton>
 
           <PrimaryBtn
             onPress={handleSubmit(onSubmit)}
+            icon={<FacebookSvg />}
             isDefault={false} >
-            Facebook
+            Entrar com Facebook
           </PrimaryBtn>
-        </Group> */}
+        </Group>
 
         <TextButton
           onPress={() => navigation.navigate('SignUp')}
           textToInfo="Não é registrado?"
           textToPress="Registrar-se" />
       </Container>
-    </GlobalApp>
+    </GlobalApp >
   )
 }

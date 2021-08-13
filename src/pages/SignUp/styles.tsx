@@ -33,6 +33,7 @@ export const Row = styled.View`
 
 export const Title = styled.Text`
   text-align: center;
+  margin-bottom: 21px;
   ${(props) => {
     return `
       color: ${props.theme.colors.darkGray};
