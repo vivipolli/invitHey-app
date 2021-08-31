@@ -1,27 +1,27 @@
 import { DefaultTheme } from 'styled-components'
 
 export const theme: DefaultTheme = {
-  colors : {
+  colors: {
     primary: '#FF7527',
     secondary: '#4CB4FF',
     softGray: '#A6A6A6',
     lineGray: '#AAAAAA',
-    textGray: '#8B8B8B',
-    darkGray: '#5A5A5A',
+    textGray: '#898D9A', //
+    darkGray: '#4A4F5E', //
     gray70: '#707070',
     white: '#ffffff',
     red: '#F4004E',
     
   },
   typography: {
-    largeFont: '24px',
-    mediumFont: '21px',
-    smallFont: '16px',
-    smallestFont: '13px',
-    tinyFont: '8px',
-    light: 'Jost_300Light',
-    regular: 'Jost_400Regular',
-    medium: 'Jost_500Medium',
-    bold: 'Jost_600SemiBold',
+    largeFont: '20px',
+    mediumFont: '18px',
+    smallFont: '16px', 
+    smallestFont: '14px', 
+    tinyFont: '12px',
+    light: 'Roboto_300Light',
+    medium: 'Roboto_500Medium',
+    regular: 'Roboto_400Regular',
+    bold: 'Roboto_700Bold',
   }
 }

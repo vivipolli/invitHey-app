@@ -22,12 +22,12 @@ export default function Welcome() {
         </Group>
         <Text>Olá! Seja bem vindo(a) ao InvitHey! Aqui você cria qualquer evento,
               participa e convida seus amigos.
-        </Text>
+        </Text> 
         <Group>
           <PrimaryBtn isDefault onPress={() => navigation.navigate('SignUp')} >Sou novo(a)</PrimaryBtn>
           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
             <LinkText>Já tenho uma conta</LinkText>
-          </TouchableOpacity>
+          </TouchableOpacity> 
         </Group>
       </Container>
     </GlobalApp>
