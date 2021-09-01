@@ -6,11 +6,13 @@ export const theme: DefaultTheme = {
     secondary: '#4CB4FF',
     softGray: '#A6A6A6',
     lineGray: '#AAAAAA',
+    lightGray: '#EDEFF3',
     textGray: '#898D9A', //
     darkGray: '#4A4F5E', //
     gray70: '#707070',
     white: '#ffffff',
-    red: '#F4004E',
+    red: '#F4004E', 
+    blue: '#4CB4FF',
     
   },
   typography: {

@@ -15,9 +15,9 @@ export function Router() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isEmpty(tokenInfo) ? (
         <>
+          <Stack.Screen name="SignIn" component={Routes.SignIn} />
           <Stack.Screen name="Onboarding" component={Routes.Onboarding} />
           <Stack.Screen name="Welcome" component={Routes.Welcome} />
-          <Stack.Screen name="SignIn" component={Routes.SignIn} />
           <Stack.Screen name="SignUp" component={Routes.SignUp} />
         </>
       ) : (

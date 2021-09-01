@@ -1,34 +1,43 @@
-import React, { ReactNode, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
-import { useNavigation } from '@react-navigation/native';
 
 import GlobalApp from '../../components/GlobalApp';
-import PrimaryBtn from '../../components/PrimaryBtn';
 import TextInput from '../../components/TextInput';
 
-import LogoType from '../../assets/images/InvitHey.svg';
+import Logo from '../../assets/images/InvitHey.svg';
 import GoogleSvg from '../../assets/icons/google.svg';
 import FacebookSvg from '../../assets/icons/facebook.svg';
+import AppleSvg from '../../assets/icons/apple.svg';
+import TwitterSvg from '../../assets/icons/twitter.svg';
 
-import TextButton from '../../components/TextButton';
-import { BoldSpan, Container, Form, Group, SocialButton, Span } from './styles';
+import { 
+  Container,
+  Text, 
+  Form, 
+  Group, 
+  SocialGroup,
+  BoldSpan, 
+  BorderSpan,
+  ButtonRegister,
+  ButtonReboot
+} from './styles';
+
+import PrimaryBtn from '../../components/PrimaryBtn';
+import SocialButton from '../../components/SocialButton';
+import LinkButton from '../../components/LinkButton';
 
 export default function SignIn() {
-  const navigation = useNavigation();
-
   const { control, handleSubmit, formState: { errors } } = useForm();
 
   function onSubmit(data: any) {
     console.info(data)
   }
 
-
-  return (
+  return(
     <GlobalApp>
       <Container>
-        <LogoType />
+        <Logo />
         <Form>
           <Controller
             control={control}
@@ -36,7 +45,8 @@ export default function SignIn() {
             name="email"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                label="Email"
+                label="Login"
+                placeholder="Digite aqui seu login"
                 onBlur={onBlur}
                 onChangeText={value => onChange(value)}
                 value={value}
@@ -44,13 +54,14 @@ export default function SignIn() {
               />
             )}
           />
-          <Controller
+          <Controller 
             control={control}
             rules={{ required: true }}
             name="password"
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
+              <TextInput 
                 label="Senha"
+                placeholder="Digite aqui sua senha"
                 onBlur={onBlur}
                 onChangeText={value => onChange(value)}
                 value={value}
@@ -58,44 +69,59 @@ export default function SignIn() {
               />
             )}
           />
-          <Group marginTop={20}>
-            <PrimaryBtn
+          <ButtonReboot>
+            <LinkButton isDefault={false}>
+                Esqueceu sua senha?
+            </LinkButton>
+          </ButtonReboot>
+
+          <Group>
+            <PrimaryBtn 
               onPress={handleSubmit(onSubmit)}
-              isDefault >
+              isDefault
+            >
               Entrar
             </PrimaryBtn>
-            <TouchableOpacity activeOpacity={0.8}>
-              <Span>Esqueci minha senha</Span>
-            </TouchableOpacity>
           </Group>
-        </Form>
 
-
-        <Group>
-          <BoldSpan>OU</BoldSpan>
-
-          <SocialButton>
-            <PrimaryBtn
+          <Group>
+            <BorderSpan />
+              <BoldSpan>ou</BoldSpan> 
+            <BorderSpan />
+          </Group>
+          <SocialGroup>
+            <SocialButton
               onPress={handleSubmit(onSubmit)}
+              isDefault={false}
               icon={<GoogleSvg />}
-              isDefault={false} >
-              Entrar com Google
-            </PrimaryBtn>
-          </SocialButton>
-
-          <PrimaryBtn
-            onPress={handleSubmit(onSubmit)}
-            icon={<FacebookSvg />}
-            isDefault={false} >
-            Entrar com Facebook
-          </PrimaryBtn>
-        </Group>
-
-        <TextButton
-          onPress={() => navigation.navigate('SignUp')}
-          textToInfo="Não é registrado?"
-          textToPress="Registrar-se" />
+            />
+            <SocialButton
+              onPress={handleSubmit(onSubmit)}
+              isDefault={false}
+              icon={<AppleSvg />}
+            />
+            <SocialButton
+              onPress={handleSubmit(onSubmit)}
+              isDefault={false}
+              icon={<FacebookSvg />}
+            />
+            <SocialButton
+              onPress={handleSubmit(onSubmit)}
+              isDefault={false}
+              icon={<TwitterSvg />}
+            />
+          </SocialGroup>
+          <ButtonRegister>
+            <Text>Não tem conta?</Text>
+            <LinkButton 
+              isDefault={false}
+              onPress={handleSubmit(onSubmit)}
+            >
+              Criar uma conta agora
+            </LinkButton>
+          </ButtonRegister>
+        </Form>
       </Container>
-    </GlobalApp >
-  )
+    </GlobalApp>
+  );
 }

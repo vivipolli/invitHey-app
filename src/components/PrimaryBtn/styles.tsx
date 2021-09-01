@@ -6,9 +6,10 @@ interface ButtonProps {
 }
 
 export const Button = styled(TouchableOpacity)<ButtonProps>`
-  height: 40px;
+  top: 30px; 
+  height: 56px;
   width: 100%;
-  border-radius: 10px;
+  border-radius: 38px;
   elevation: 2;
   align-items: center;
   flex-direction: row;
@@ -22,7 +23,7 @@ export const Text = styled.Text<ButtonProps>`
     return `
       color: ${props.isDefault ? props.theme.colors.white : props.theme.colors.textGray};
       font-size: ${props.theme.typography.smallFont};
-      font-family: ${props.theme.typography.bold};
+      font-family: ${props.theme.typography.medium};
     `
   }}
 `
