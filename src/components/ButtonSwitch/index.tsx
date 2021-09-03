@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Switch }  from 'react-native';
 
+interface ButtonSwitchProps  {
+  isEnabled: boolean,
+  toggleSwitch: () => void,
+}
 
-export default function ButtonSwitch() {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+export default function ButtonSwitch({ isEnabled, toggleSwitch }: ButtonSwitchProps) {
 
   return(
     <Switch

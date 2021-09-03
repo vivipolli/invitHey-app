@@ -14,7 +14,6 @@ export const MaskedInput = styled(TextInputMask)<InputProps>`
   height: 50px;
   width: 100%;
   border-radius: 40px;
-  /* border-width: 1px; */
   border-color: ${props => props.error ? props.theme.colors.red : props.theme.colors.lineGray};
   padding-left: 15px;
 `
