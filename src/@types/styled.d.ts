@@ -13,10 +13,12 @@ declare module 'styled-components' {
       softGray: string,
       lineGray: string,
       textGray: string,
+      lightGray: string,
       darkGray: string,
       gray70: string,
       white: string,
       red: string,
+      blue: string,
     },
     typography: {
       largeFont: string,

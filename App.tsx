@@ -1,6 +1,7 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
-import {
+
+ import {
   useFonts,
   Jost_300Light,
   Jost_400Regular,

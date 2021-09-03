@@ -13,26 +13,26 @@ export const Container = styled.View`
 export const MaskedInput = styled(TextInputMask)<InputProps>`
   height: 50px;
   width: 100%;
-  border-radius: 8px;
-  border-width: 1px;
+  border-radius: 40px;
   border-color: ${props => props.error ? props.theme.colors.red : props.theme.colors.lineGray};
   padding-left: 15px;
 `
 
 export const Input = styled(TextInput)<InputProps>`
-  height: 50px;
+  height: 56px;
   width: 100%;
-  border-radius: 8px;
-  border-width: 1px;
+  border-radius: 40px; 
   border-color: ${props => props.error ? props.theme.colors.red : props.theme.colors.textGray};
   padding-left: 15px;
+  background-color: ${props => props.theme.colors.lightGray};
 `
 
 export const Label = styled.Text<InputProps>`
+  left: 15px;
   ${(props) => {
     return `
-      font-family: ${props.theme.typography.regular};
-      color: ${props.error ? props.theme.colors.red : props.theme.colors.softGray};
+      font-family: ${props.theme.typography.medium};
+      color: ${props.error ? props.theme.colors.red : props.theme.colors.darkGray};
       font-size: ${props.theme.typography.smallFont};
       margin-bottom: 8px;
     `
