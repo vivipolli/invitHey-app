@@ -1,14 +1,5 @@
 import styled from '../../../styled-components';
-import { Platform } from 'react-native';
 
-type Props = {
-  primaryBg: boolean,
-}
-
-
-export const Logo = styled.Image`
-
-`
 
 export const Container = styled.View`
   flex: 1;

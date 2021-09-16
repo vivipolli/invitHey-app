@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {  
+import {
     Container,
     Page,
     ArrowIcon,
@@ -11,15 +11,13 @@ interface Props {
     page: string;
 }
 
-export function Header( { page }: Props ) {
-
-
+export function Header({ page }: Props) {
     return (
         <Container>
             <Back>
-                <ArrowIcon name='arrow-left'/>
+                <ArrowIcon name='arrow-left' />
             </Back>
-            <Page>{page}</Page>    
+            <Page>{page}</Page>
         </Container>
     );
 }

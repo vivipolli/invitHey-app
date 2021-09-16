@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 
+
 import { Router } from './app.routes';
 
 export function Routes() {

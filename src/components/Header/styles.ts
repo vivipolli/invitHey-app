@@ -1,9 +1,9 @@
-import styled from 'styled-components/native';
+import styled from '../../../styled-components';
 import { Feather } from '@expo/vector-icons';
  
 
 export const Container = styled.View`
-    background-color: ${({theme}) => theme.colors.background};
+    background-color: ${(props) => props.theme.colors.white};
     height: 56px;
     width: 100%;
     flex-direction: row;
@@ -12,8 +12,8 @@ export const Container = styled.View`
 `;
 
 export const ArrowIcon = styled(Feather)`
-    font-size: ${({theme}) => theme.fonts.smallFont};
-    color: ${({theme}) => theme.colors.primary}; 
+    font-size: ${(props) => props.theme.typography.smallFont};
+    color: ${(props) => props.theme.colors.primary}; 
     margin-right: 28px;
 `;
 
@@ -22,8 +22,8 @@ export const Back = styled.TouchableOpacity.attrs({
 })``;
 
 
-export const Page = styled.View`
-    font-family: ${({theme}) => theme.weight.medium};
-    font-size: ${({theme}) => theme.fonts.largeFont};
-    color: ${({theme}) => theme.colors.darkGray};
+export const Page = styled.Text`
+    font-family: ${(props) => props.theme.typography.regular};
+    font-size: ${(props) => props.theme.typography.largeFont};
+    color: ${(props) => props.theme.colors.darkGray};
 `;
