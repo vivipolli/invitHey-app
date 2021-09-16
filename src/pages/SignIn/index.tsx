@@ -63,6 +63,7 @@ export default function SignIn() {
                 label="Senha"
                 placeholder="Digite aqui sua senha"
                 onBlur={onBlur}
+                secureTextEntry
                 onChangeText={value => onChange(value)}
                 value={value}
                 error={errors.password?.type === 'required'}
