@@ -8,12 +8,14 @@ import {
 
 interface Props extends TouchableOpacityProps {
   textBtn: string;
+  isActive?: boolean;
+  handleButton?: () => void;
 }
 
-export function TagButton({ textBtn, ...rest }: Props) {
+export function TagButton({ textBtn, isActive, handleButton, ...rest }: Props) {
   return (
-    <Btn {...rest}>
-      <TextBtn>{textBtn}</TextBtn>
+    <Btn isActive={isActive} onPress={handleButton}>
+      <TextBtn isActive={isActive}>{textBtn}</TextBtn>
     </Btn>
   );
 }

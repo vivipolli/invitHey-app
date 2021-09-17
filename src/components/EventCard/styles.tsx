@@ -16,7 +16,6 @@ export const Text = styled.Text`
 
 export const Card = styled.View`
     margin-top: 10px;
-    width: 328px;
     height: 144px;
     border-radius: 10px;
     background-color: ${props => props.theme.colors.lightGray};

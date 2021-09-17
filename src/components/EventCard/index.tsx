@@ -29,7 +29,7 @@ export interface CardProps {
     paymentInfo: string;
     description: string;
     isActiveIcon: boolean;
-    handleChangeIcon: () => void;
+    handleChangeIcon?: () => void;
 }
 
 export function EventCard( { 

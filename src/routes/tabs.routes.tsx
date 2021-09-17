@@ -68,8 +68,8 @@ export function Tabs() {
         }}
       />
       <Tab.Screen
-        name='Welcome'
-        component={Routes.Welcome}
+        name='Profile'
+        component={Routes.Profile}
         options={{
           header: (props) =>
             <ThemeProvider theme={theme}>
