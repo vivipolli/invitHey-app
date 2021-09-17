@@ -37,10 +37,7 @@ export function Tabs() {
         name='SignIn'
         component={Routes.SignIn}
         options={{
-          header: props =>
-            <ThemeProvider theme={theme}>
-              <Header page='Meus Eventos' />
-            </ThemeProvider>,
+          header: props =>  <Header page='Meus Eventos' />,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='event'
@@ -54,10 +51,7 @@ export function Tabs() {
         name='SignUp'
         component={Routes.SignUp}
         options={{
-          header: props =>
-            <ThemeProvider theme={theme}>
-              <Header page='Criar Evento' />
-            </ThemeProvider>,
+          header: props => <Header page='Criar Evento' />,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='add-circle-outline'
@@ -71,10 +65,7 @@ export function Tabs() {
         name='Profile'
         component={Routes.Profile}
         options={{
-          header: (props) =>
-            <ThemeProvider theme={theme}>
-              <Header page='Meu Perfil' />
-            </ThemeProvider>,
+          header: (props) => <Header page='Meu Perfil' />,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='person-outline'

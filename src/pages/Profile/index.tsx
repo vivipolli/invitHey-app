@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import {
   FlatList,
-  View, 
+  View,
   ScrollView
 } from 'react-native';
 
@@ -44,75 +44,73 @@ export default function Profile() {
 
   return (
     <GlobalComponent>
-      <Container>
-        <FlexHeader>
-          <Avatar source={avatar} />
-          <View>
-            <TextName>Johnny Cash</TextName>
-            <NickName>johnnyejune</NickName>
-          </View>
-        </FlexHeader>
+      <FlexHeader>
+        <Avatar source={avatar} />
+        <View>
+          <TextName>Johnny Cash</TextName>
+          <NickName>johnnyejune</NickName>
+        </View>
+      </FlexHeader>
+
+      <FlexRow>
+        <TagButton
+          isActive={btnActive === 'followers'}
+          handleButton={() => handleBtnActive('followers')}
+          textBtn="Seguidores (530)" />
+        <TagButton
+          isActive={btnActive === 'following'}
+          handleButton={() => handleBtnActive('following')}
+          textBtn="Seguindo (240)" />
+      </FlexRow>
+
+      <View>
+        <LargeTitle>
+          Meus Eventos
+        </LargeTitle>
 
         <FlexRow>
-          <TagButton
-            isActive={btnActive === 'followers'}
-            handleButton={() => handleBtnActive('followers')}
-            textBtn="Seguidores (530)" />
-          <TagButton
-            isActive={btnActive === 'following'}
-            handleButton={() => handleBtnActive('following')}
-            textBtn="Seguindo (240)" />
+          <ScrollView horizontal>
+            <TagButton
+              isActive={filterActive === filter.all}
+              handleButton={() => handleFilterActive(filter.all)}
+              textBtn="Todos" />
+            <ListSpace />
+
+            <TagButton
+              isActive={filterActive === filter.created}
+              handleButton={() => handleFilterActive(filter.created)}
+              textBtn="Criados" />
+            <ListSpace />
+
+            <TagButton
+              isActive={filterActive === filter.participating}
+              handleButton={() => handleFilterActive(filter.participating)}
+              textBtn="Participando" />
+            <ListSpace />
+
+            <TagButton
+              isActive={filterActive === filter.following}
+              handleButton={() => handleFilterActive(filter.following)}
+              textBtn="Seguindo" />
+          </ScrollView>
         </FlexRow>
 
-        <View>
-          <LargeTitle>
-            Meus Eventos
-          </LargeTitle>
+        <FlatList
+          data={data}
+          showsVerticalScrollIndicator={false}
+          renderItem={({ item }) =>
+            <EventCard
+              title={item.title}
+              description={item.description}
+              hourInfo={item.hourInfo}
+              dateInfo={item.dateInfo}
+              isActiveIcon={item.isActiveIcon}
+              paymentInfo={item.paymentInfo}
+            />}
+          keyExtractor={item => item.id}
+        />
 
-          <FlexRow>
-            <ScrollView horizontal>
-              <TagButton
-                isActive={filterActive === filter.all}
-                handleButton={() => handleFilterActive(filter.all)}
-                textBtn="Todos" />
-              <ListSpace />
-
-              <TagButton
-                isActive={filterActive === filter.created}
-                handleButton={() => handleFilterActive(filter.created)}
-                textBtn="Criados" />
-              <ListSpace />
-
-              <TagButton
-                isActive={filterActive === filter.participating}
-                handleButton={() => handleFilterActive(filter.participating)}
-                textBtn="Participando" />
-              <ListSpace />
-
-              <TagButton
-                isActive={filterActive === filter.following}
-                handleButton={() => handleFilterActive(filter.following)}
-                textBtn="Seguindo" />
-            </ScrollView>
-          </FlexRow>
-
-          <FlatList
-            data={data}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) =>
-              <EventCard
-                title={item.title}
-                description={item.description}
-                hourInfo={item.hourInfo}
-                dateInfo={item.dateInfo}
-                isActiveIcon={item.isActiveIcon}
-                paymentInfo={item.paymentInfo}
-              />}
-            keyExtractor={item => item.id}
-          />
-
-        </View>
-      </Container>
+      </View>
     </GlobalComponent >
   );
 }
