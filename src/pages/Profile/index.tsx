@@ -101,7 +101,7 @@ export default function Profile() {
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) =>
               <EventCard
-                title={item.id}
+                title={item.title}
                 description={item.description}
                 hourInfo={item.hourInfo}
                 dateInfo={item.dateInfo}
