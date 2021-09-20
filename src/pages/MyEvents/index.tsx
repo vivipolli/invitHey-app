@@ -59,7 +59,7 @@ export const data: ListProps[] = [
   }
 ];
 
-export function MeusEventos() {
+export default function MeusEventos() {
 
   const handleIcon = () => {
     // to do: chancge icon state
