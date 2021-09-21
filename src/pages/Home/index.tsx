@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { View } from 'react-native';
 
-import Bell from '../../assets/icons/Bell.svg';
 import GlobalApp from '../../components/GlobalApp';
-import Logo from '../../assets/images/logoType_small.svg';
+
 import {
     FilterButtonList
 } from './styles';
@@ -19,6 +18,23 @@ import ResearchInput from '../../components/ResearchInput';
 
 export default function Home() {
 
+    const [btnActive, setBtnActive] = useState('');
+    const [filterActive, setFilterActive] = useState('all');
+
+    const filter = {
+        recent: 'recent',
+        popular: 'popular',
+        review: 'review',
+        proximity: 'proximity',
+    }
+
+    function handleBtnActive(type: string) {
+        setBtnActive(type);
+      }
+    
+    function handleFilterActive(type: string) {
+      setFilterActive(type);
+    }
 
     const handleIcon = () => {}
 
@@ -81,10 +97,26 @@ export default function Home() {
             <ResearchInput placeholder='Pesquise por evento, local ou interesse'/>
             <View>
                 <FilterButtonList>
-                    <TagButton textBtn='Mais Recentes' />
-                    <TagButton textBtn='Mais Populares' />
-                    <TagButton textBtn='Avaliacao' />
-                    <TagButton textBtn='Proximidade' />
+                    <TagButton 
+                        textBtn='Mais Recentes' 
+                        isActive={filterActive === filter.recent}
+                        handleButton={() => handleFilterActive(filter.recent)}
+                    />
+                    <TagButton 
+                        textBtn='Mais Populares' 
+                        isActive={filterActive === filter.popular}
+                        handleButton={() => handleFilterActive(filter.popular)}
+                    />
+                    <TagButton 
+                        textBtn='Avaliacao' 
+                        isActive={filterActive === filter.review}
+                        handleButton={() => handleFilterActive(filter.review)}
+                    />
+                    <TagButton 
+                        textBtn='Proximidade' 
+                        isActive={filterActive === filter.proximity}
+                        handleButton={() => handleFilterActive(filter.proximity)}
+                    />
                 </FilterButtonList>
             </View>
             <List>
