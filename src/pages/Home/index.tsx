@@ -111,6 +111,7 @@ export default function Home() {
                         textBtn='Avaliacao' 
                         isActive={filterActive === filter.review}
                         handleButton={() => handleFilterActive(filter.review)}
+                        // 
                     />
                     <TagButton 
                         textBtn='Proximidade' 
