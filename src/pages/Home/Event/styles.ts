@@ -61,9 +61,9 @@ export const FavoriteButton = styled(TouchableOpacity).attrs({
 
 export const ModalView = styled.View`
     padding: 16px 24px 0 24px;
-    height: 50%;
+    height: 60.8%;
     margin-top: auto;
-    background-color: #ccc;
+    background-color: #F1F1F1;
     border-radius: 10px;
 `;
 
