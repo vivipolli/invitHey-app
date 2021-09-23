@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Modal } from 'react-native';
 
-import ImageBg from '../../assets/images/bg.png';
+import ImageBg from '../../../assets/images/bg.png';
 
-import GlobalComponent from '../../components/GlobalApp'; 
-import { TagButton } from '../../components/TagButton';
+import GlobalComponent from '../../../components/GlobalApp'; 
+import { TagButton } from '../../../components/TagButton';
 
 import {
     BackgroundImage,
@@ -135,7 +135,7 @@ export function Event() {
                 </GeneralInfo>
                 
                 <Modal visible={modalOpen} animationType='slide' >
-                    <ModalView style={{ height: '400'}} >    
+                    <ModalView >    
                         <ButtonModal onPress={() => setModalOpen(false)} >
                             <Icon name={data.icons.close} />
                         </ButtonModal>

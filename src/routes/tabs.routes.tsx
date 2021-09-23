@@ -35,7 +35,7 @@ export function Tabs() {
       />
       <Tab.Screen
         name='Meus Eventos'
-        component={Routes.MyEvents}
+        component={Routes.Event}
         options={{
           header: props =>  <Header page='Meus Eventos' />,
           tabBarIcon: (({ size, color }) => (
