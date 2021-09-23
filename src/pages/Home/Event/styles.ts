@@ -4,6 +4,10 @@ import { TouchableOpacity } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
+export const Modal = styled.Modal`
+    height: 50%;
+`;
+
 export const BackgroundImage = styled.Image.attrs({
     resizeMode: 'cover'
 })`
@@ -57,7 +61,10 @@ export const FavoriteButton = styled(TouchableOpacity).attrs({
 
 export const ModalView = styled.View`
     padding: 16px 24px 0 24px;
-    height: 400px;
+    height: 50%;
+    margin-top: auto;
+    background-color: #ccc;
+    border-radius: 10px;
 `;
 
 export const Header = styled.View`

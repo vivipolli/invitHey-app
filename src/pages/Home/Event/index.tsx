@@ -134,7 +134,7 @@ export function Event() {
                     </Description>
                 </GeneralInfo>
                 
-                <Modal visible={modalOpen} animationType='slide' >
+                <Modal visible={modalOpen} animationType='slide' transparent={true} >
                     <ModalView >    
                         <ButtonModal onPress={() => setModalOpen(false)} >
                             <Icon name={data.icons.close} />
