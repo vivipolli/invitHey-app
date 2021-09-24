@@ -4,12 +4,14 @@ export const Card = styled.View`
     width: 100%;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 30px;
 `;
 
 export const PeopleImage = styled.Image`
     width: 44px;
     height: 44px;
     background-color: #ccc;
+    border-radius: 5px;
 `;
 
 export const PeopleInfo = styled.View`
