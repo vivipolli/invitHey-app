@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 
-import ImageBg from '../../../assets/images/bg.png';
+import ImageBg from '../../assets/images/bg.png';
 
 import GlobalComponent from '../../components/GlobalApp'; 
 import { TagButton } from '../../components/TagButton';

@@ -11,7 +11,7 @@ import {
 } from './styles';
 import { TagButton } from '../TagButton';
 
-interface Props {
+export interface Props {
   nickName: string;
   normalName: string;
   buttonTitle: string;
