@@ -17,7 +17,6 @@ export const Btn = styled.TouchableOpacity<BtnProps>`
     align-items: center;
     justify-content: center;
     border-radius: 20px;
-    margin-right: 8px;
 `;
 
 export const TextBtn = styled.Text<BtnProps>`
