@@ -52,7 +52,6 @@ export function Followers() {
 
     // Auxiliares
     const aux = {
-        filter: 'followers' || 'following',
         numbers: {
             followers: '560',
             following: '200'    
