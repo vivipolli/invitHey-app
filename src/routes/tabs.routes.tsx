@@ -5,8 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import * as Routes from '../pages';
 import { Header } from '../components/Header';
-import { ThemeProvider } from '../../styled-components';
-import { theme } from '../../theme';
+import { HeaderHome } from '../pages/Home/HeaderHome';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,10 +19,11 @@ export function Tabs() {
       }}
     >
       <Tab.Screen
-        name='Onboarding'
-        component={Routes.Onboarding}
+        name='Home'
+        component={Routes.Home}
         options={{
-          headerShown: false,
+          headerShown: true,
+          header: props =>  <HeaderHome />,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='home'
@@ -34,8 +34,8 @@ export function Tabs() {
         }}
       />
       <Tab.Screen
-        name='SignIn'
-        component={Routes.SignIn}
+        name='Meus Eventos'
+        component={Routes.Event}
         options={{
           header: props =>  <Header page='Meus Eventos' />,
           tabBarIcon: (({ size, color }) => (
