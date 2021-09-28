@@ -121,12 +121,6 @@ export default function Home() {
                         handleButton={() => handleFilterActive(filter.proximity)}
                     />
                 </FilterButtonList>
-
-                <Checkbox 
-                    checked={checked}
-                    onPress={() => setChecked(!checked)}
-                />
-
             </View>
             <List>
                 <EventCardsList 
