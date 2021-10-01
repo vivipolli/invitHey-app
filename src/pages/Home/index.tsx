@@ -14,19 +14,21 @@ import { TagButton } from '../../components/TagButton';
 import { EventCard } from '../../components/EventCard';
 import { List, EventCardsList } from '../MyEvents/styles';
 import ResearchInput from '../../components/ResearchInput';
+import { Checkbox } from '../../components/Checkbox';
 
 
 export default function Home() {
-
-    const [btnActive, setBtnActive] = useState('');
-    const [filterActive, setFilterActive] = useState('all');
-
     const filter = {
         recent: 'recent',
         popular: 'popular',
         review: 'review',
         proximity: 'proximity',
     }
+
+
+    const [btnActive, setBtnActive] = useState('');
+    const [filterActive, setFilterActive] = useState('all');
+    const [checked, setChecked] = useState(false);
 
     function handleBtnActive(type: string) {
         setBtnActive(type);
