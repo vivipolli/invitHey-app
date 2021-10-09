@@ -1,3 +1,4 @@
+export { CreateEvent } from './CreateEvent'; 
 export { Invite } from './Invite';
 export { Followers } from './Followers';
 export { Event } from './Event';
