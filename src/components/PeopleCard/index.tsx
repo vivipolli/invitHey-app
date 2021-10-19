@@ -20,9 +20,9 @@ export interface Props {
 export function PeopleCard({ nickName, normalName, buttonTitle }: Props) {
   return (
     <Card>
-      <PeopleImage
+      {/* <PeopleImage
         source={{ uri: 'https://avatars.githubusercontent.com/u/55644267?v=4' }}
-      />
+      /> */}
       <PeopleInfo>
         <View>
           <NickName>{nickName}</NickName>

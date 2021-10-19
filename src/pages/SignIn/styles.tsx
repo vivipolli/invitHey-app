@@ -5,16 +5,14 @@ type GroupProps = {
 }
 
 export const Container = styled.View`
-  flex: 1;
-  justify-content: space-around;
   align-items: center;
-  padding: 5px;
+  padding: 50px 20px;
 `
 
 export const Form = styled.View`
   width: 100%;
   flex-direction: column;
-  bottom: 170px;
+  margin-top: 20%;
 `
 
 export const Group = styled.View<GroupProps>`
@@ -72,6 +70,6 @@ export const ButtonRegister = styled.View`
 `
 
 export const ButtonReboot = styled.View`
-  width: 43%;
-  left: 185px;
+  text-align: right;
+  align-self: flex-end;
 `

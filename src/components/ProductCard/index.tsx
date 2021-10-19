@@ -23,9 +23,9 @@ interface Props {
 export function ProductCard({ title, amount, paymentCondition }: Props) {
   return (
     <Card>
-      <ProductImage
+      {/* <ProductImage
         source={{ uri: 'https://avatars.githubusercontent.com/u/55644267?v=4' }}
-      />
+      /> */}
 
       <MainInfo>
         <Header>

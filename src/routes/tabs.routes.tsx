@@ -2,12 +2,24 @@ import React from 'react';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import * as Routes from '../pages';
 import { Header } from '../components/Header';
 import { HeaderHome } from '../pages/Home/HeaderHome';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+
+const CreateEventRoutes = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="CreateEvent" component={Routes.CreateEvent} />
+      <Stack.Screen name="CreateGiftList" component={Routes.CreateGiftList} />
+    </Stack.Navigator>
+  )
+}
 
 export function Tabs() {
   return (
@@ -48,10 +60,10 @@ export function Tabs() {
         }}
       />
       <Tab.Screen
-        name='SignUp'
-        component={Routes.SignUp}
+        name='CreateEventRoutes'
+        component={CreateEventRoutes}
         options={{
-          header: props => <Header page='Criar Evento' />,
+          header: props => <Header page={props.route.name} />,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='add-circle-outline'

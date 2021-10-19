@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { TextInputProps } from 'react-native';
+import { TextInputProps, Text } from 'react-native';
 import { Input, Label, Container, MaskedInput } from './styles';
 
 interface InputProps extends TextInputProps {
@@ -8,25 +8,44 @@ interface InputProps extends TextInputProps {
   error?: boolean,
   width?: string,
   type?: string,
+  mask?: string,
+  errorMsg?: string,
 }
 
-export default function TextInput({ label, width, type, error, ...props }: (InputProps)) {
+export default function TextInput({
+  label,
+  width,
+  type,
+  errorMsg,
+  error,
+  mask,
+  ...props }: (InputProps)) {
   const maskTypes = {
     cpf: 'cpf',
     cnpj: 'cnpj',
+    money: 'money',
     date: 'datetime',
+    card: 'credit-card',
+    custom: 'custom',
   };
 
   const masked = (type: string) => maskTypes[type];
+
 
   return (
     <Container style={{ width }}>
       <Label error={error}>{label}</Label>
       {type ?
-        <MaskedInput type={type ? masked(type) : 'custom'} error={error} {...props} />
+        <MaskedInput
+          type={type ? masked(type) : 'custom'}
+          error={error}
+          options={{ mask }}
+          {...props}
+        />
         :
         <Input error={error} {...props} />
       }
-    </Container>
+      <Text>{errorMsg}</Text>
+    </Container >
   )
 }

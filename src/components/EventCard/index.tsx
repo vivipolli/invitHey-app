@@ -45,9 +45,9 @@ export function EventCard( {
     return (
         <Card>
             <CardHeader>
-                <EventImage
+                {/* <EventImage
                     source={{uri: 'https://avatars.githubusercontent.com/u/55644267?v=4'}}
-                />
+                /> */}
                 <Hold>
                     <TitleHeart>
                         <CardTitle>{title}</CardTitle>

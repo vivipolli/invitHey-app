@@ -1,25 +1,46 @@
-import React, { ReactNode, useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import React from 'react';
+import { Alert } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
+import { Restart } from 'fiction-expo-restart';
+import Parse from 'parse/react-native';
 
 import GlobalApp from '../../components/GlobalApp';
 import PrimaryBtn from '../../components/PrimaryBtn';
 import TextInput from '../../components/TextInput';
 
-import LogoType from '../../assets/images/logoType_small.svg';
 import TextButton from '../../components/TextButton';
 import { Container, Form, Group, Row, Title } from './styles';
+
+interface User {
+  email: string,
+  name: string,
+  password: string,
+}
 
 export default function SignUp() {
   const navigation = useNavigation();
 
   const { control, handleSubmit, formState: { errors } } = useForm();
 
-  function onSubmit(data: any) {
-    console.info(data)
-  }
+  const onSubmit = async function (data: User): Promise<boolean> {
+    const { email, name, password } = data;
+    const user: Parse.User = new Parse.User();
+    user.set('username', name);
+    user.set('email', email);
+    user.set('password', password);
+
+    try {
+      let userResult: Parse.User = await user.signUp();
+      Restart();
+      return true;
+    } catch (error: any) {
+      Alert.alert('Error!', error.message);
+      console.info(error);
+      return false;
+    }
+  };
 
 
   return (
@@ -89,7 +110,7 @@ export default function SignUp() {
               )}
             />
           </Row>
-          <Controller
+          {/* <Controller
             control={control}
             rules={{ required: true }}
             name="cellPhone"
@@ -116,7 +137,7 @@ export default function SignUp() {
                 error={errors.birthDate?.type === 'required'}
               />
             )}
-          />
+          /> */}
           <Group marginTop={20}>
             <PrimaryBtn
               onPress={handleSubmit(onSubmit)}
@@ -126,7 +147,7 @@ export default function SignUp() {
           </Group>
         </Form>
         <TextButton
-          onPress={() => navigation.navigate('SignIn')}
+          onPress={() => {}}
           textToInfo="Já tem uma conta?"
           textToPress="Entrar" />
       </Container>

@@ -8,8 +8,3 @@ export const FilterButtonList = styled.ScrollView.attrs({
     flex-direction: row;
 `;
 
-export const Main = styled.View`
-    flex: 1;
-    background-color: #FCFCFC;
-`;
-

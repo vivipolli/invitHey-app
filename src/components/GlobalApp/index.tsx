@@ -8,7 +8,7 @@ interface GlobalAppProps {
 export default function GlobalComponent({ children }: GlobalAppProps) {
 
   return (
-    <Container primaryBg={false}>
+    <Container>
       {children}
     </Container>
   )
