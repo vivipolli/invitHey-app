@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import { Card, TextInput, List } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/core';
 
 import GlobalComponent from '../../components/GlobalApp';
 
@@ -10,15 +11,21 @@ import GlobalComponent from '../../components/GlobalApp';
 export function CreateGiftList() {
   const [category, setCategory] = useState('');
   const [expanded, setExpanded] = useState(false);
-
-  const [isPaid, setIsPaid] = useState(false);
-
+  const [selectTitle, setSelectTitle] = useState('Categoria');
   const [privacyType, setPrivacyType] = useState('');
+
+  const navigation = useNavigation();
+
   const { control, handleSubmit, formState: { errors } } = useForm();
+
+  useEffect(() => {
+    navigation.setParams({ headerTitle: 'Criar Sugestões de presentes'})
+  }, [])
 
   function choiceCategory(item: string) {
     setCategory(item);
     setExpanded(false);
+    setSelectTitle(item);
   }
 
   const categories = [
@@ -52,13 +59,14 @@ export function CreateGiftList() {
           />
           <List.Section>
             <List.Accordion
+              onPress={() => setExpanded(open => !open)}
               expanded={expanded}
-              title="Categoria">
+              title={selectTitle}>
               {categories.map(item =>
                 <TouchableOpacity
                   key={item}
                   onPress={() => choiceCategory(item)} >
-                  <List.Item title="Brinquedos" />
+                  <List.Item title={item} />
                 </TouchableOpacity>
               )}
             </List.Accordion>

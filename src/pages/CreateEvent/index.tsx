@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import GlobalComponent from '../../components/GlobalApp';
 import ButtonSwitch from '../../components/ButtonSwitch';
@@ -32,7 +33,14 @@ export function CreateEvent() {
   const [isPaid, setIsPaid] = useState(false);
 
   const [privacyType, setPrivacyType] = useState('');
+  const navigation = useNavigation();
+  const route = useRoute();
   const { control, handleSubmit, formState: { errors } } = useForm();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({ title: 'teste' });
+  },
+  [navigation]);
 
 
   function handleChange(type: string) {
@@ -329,7 +337,7 @@ export function CreateEvent() {
             <CategoryText>Nao</CategoryText>
           </Category>
         </FlexRow> */}
-        <PrimaryBtn isDefault>Adicionar convidados</PrimaryBtn>
+        <PrimaryBtn onPress={() => navigation.navigate('CreateGiftList')} isDefault>Adicionar convidados</PrimaryBtn>
         <Space />
       </List>
     </GlobalComponent>
