@@ -24,8 +24,8 @@ import {
 
 export interface CardProps {
     title: string;
-    dateInfo: string;
-    hourInfo: string;
+    datetime: string;
+    hourInfo?: string;
     paymentInfo: string;
     description: string;
     isActiveIcon: boolean;
@@ -34,7 +34,7 @@ export interface CardProps {
 
 export function EventCard( { 
     title, 
-    dateInfo, 
+    datetime, 
     paymentInfo, 
     hourInfo, 
     description, 
@@ -60,7 +60,7 @@ export function EventCard( {
                     <CardInfo>
                         <Date>
                             <DateIcon name="calendar-blank"  />
-                            <Text>{dateInfo}</Text>
+                            <Text>{datetime}</Text>
                         </Date>
                         <Hour>
                             <HourIcon name="clock-outline" />   

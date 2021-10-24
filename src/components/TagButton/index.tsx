@@ -9,7 +9,7 @@ import {
 interface Props extends TouchableOpacityProps {
   textBtn: string;
   isActive?: boolean;
-  handleButton?: () => void;
+  handleButton: () => void;
 }
 
 export function TagButton({ textBtn, isActive, handleButton, ...rest }: Props) {

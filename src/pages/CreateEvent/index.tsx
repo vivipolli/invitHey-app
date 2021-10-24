@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Parse from 'parse/react-native';
 
 import GlobalComponent from '../../components/GlobalApp';
 import ButtonSwitch from '../../components/ButtonSwitch';
@@ -23,32 +24,111 @@ import {
 } from './styles';
 import TextInput from '../../components/TextInput';
 import PrimaryBtn from '../../components/PrimaryBtn';
+import { StackParams } from '../../routes/routes.types';
+import { GiftProps } from '../CreateGIftList';
+import { GuestProps } from '../CreateGuest';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+type Address = {
+  cep: string;
+  street: string;
+  number: string;
+  vilage: string;
+  state: string;
+  city: string;
+}
+
+type EventProps = {
+  type: string;
+  name: string;
+  datetime: string;
+  cep?: string;
+  street?: string;
+  number?: string;
+  vilage?: string;
+  state?: string;
+  city?: string;
+  description: string;
+  isPaid: boolean;
+  price?: string; 
+  gifts?: GiftProps[];
+  guests: GuestProps[];
+}
 
 export function CreateEvent() {
-  const [enabled, setEnabled] = useState({
+  const [guests, setGuests] = useState();
+  const [gifts, setGifts] = useState();
+  const [data, setData] = useState();
+  const [privacyType, setPrivacyType] = useState('private');
+
+  const [typeEnabled, setTypeEnabled] = useState({
     private: true,
     public: false,
   });
 
   const [isPaid, setIsPaid] = useState(false);
 
-  const [privacyType, setPrivacyType] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<StackParams>>();
+
   const route = useRoute();
   const { control, handleSubmit, formState: { errors } } = useForm();
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({ title: 'teste' });
-  },
-  [navigation]);
 
+  useEffect(() => {
+    if (route.params) {
+      setGuests(route.params.guests);
+      setGifts(route.params.gifts);
+    }
+  }, [])
 
   function handleChange(type: string) {
-    setEnabled({ [type]: !enabled[type] });
+    setTypeEnabled({ [type]: !typeEnabled[type] });
     setPrivacyType(type);
-    console.log(enabled);
+    console.log(typeEnabled);
   }
 
+  const createEvent = async function (data: EventProps): Promise<boolean> {
+    console.info(data);
+    console.info(guests);
+    console.info(gifts);
+    try {
+      let Event: Parse.Object = new Parse.Object('Event');
+      const currentUser = await Parse.User.currentAsync();
+      
+      const address = {
+        cep: data.cep,
+        street: data.street,
+        number: data.number,
+        vilage: data.vilage,
+        state: data.state,
+        city: data.city,
+      }      
+      Event.set('owner', currentUser?.get('username'));
+      Event.set('type', privacyType);
+      Event.set('name', data.name);
+      Event.set('datetime', data.datetime);
+      Event.set('address', address);
+      Event.set('description', data.description);
+      Event.set('isPaid', isPaid);
+      Event.set('price', data.price);     
+    
+
+      try {
+        const event = await Event.save();
+        const eventParsed = JSON.parse(JSON.stringify(event))
+        navigation.navigate('CreateGuest', { objectId: eventParsed.objectId });
+
+        console.info('success');
+        return true;
+      } catch (error) {
+        console.info(error)
+        return false;
+      }
+    } catch (error) {
+      console.info(error)
+      return false;
+    }
+  };
 
   return (
     <GlobalComponent>
@@ -56,7 +136,7 @@ export function CreateEvent() {
         <Title style={{ marginBottom: 20 }}>Seleção de Privacidade</Title>
         <Category>
           <ButtonSwitch
-            isEnabled={enabled.private}
+            isEnabled={typeEnabled.private}
             toggleSwitch={() => handleChange('private')}
           />
           <CategoryText>Evento Privado</CategoryText>
@@ -64,7 +144,7 @@ export function CreateEvent() {
 
         <Category>
           <ButtonSwitch
-            isEnabled={enabled.public}
+            isEnabled={typeEnabled.public}
             toggleSwitch={() => handleChange('public')}
           />
           <CategoryText>Evento Público</CategoryText>
@@ -113,24 +193,6 @@ export function CreateEvent() {
               />
             )}
           />
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            name="hour"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Hora"
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-                placeholder="14:00"
-                type='custom'
-                mask="HH:mm"
-                width="40%"
-                error={errors.hour?.type === 'required'}
-              />
-            )}
-          />
         </FlexRow>
 
         <Controller
@@ -141,6 +203,7 @@ export function CreateEvent() {
             <TextInput
               label="Cep"
               onBlur={onBlur}
+              keyboardType="numeric"
               onChangeText={value => onChange(value)}
               value={value}
               placeholder="00000-000"
@@ -172,6 +235,7 @@ export function CreateEvent() {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 label="Número"
+                keyboardType="numeric"
                 onBlur={onBlur}
                 onChangeText={value => onChange(value)}
                 value={value}
@@ -248,9 +312,6 @@ export function CreateEvent() {
         />
 
 
-
-
-
         <Separator style={{ marginTop: 15 }} />
         {/* 
         <Title style={{ marginBottom: 16 }}>Selecione o tipo de evento: </Title>
@@ -324,20 +385,21 @@ export function CreateEvent() {
         <FlexRow style={{ justifyContent: 'flex-start' }}>
           <Category>
             <ButtonSwitch
-              isEnabled={enabled}
+              isEnabled={typeEnabled}
               toggleSwitch={handleChange}
             />
             <CategoryText>Sim</CategoryText>
           </Category>
           <Category style={{ marginLeft: 25 }}>
             <ButtonSwitch
-              isEnabled={enabled}
+              isEnabled={typeEnabled}
               toggleSwitch={handleChange}
             />
             <CategoryText>Nao</CategoryText>
           </Category>
         </FlexRow> */}
-        <PrimaryBtn onPress={() => navigation.navigate('CreateGiftList')} isDefault>Adicionar convidados</PrimaryBtn>
+        <PrimaryBtn onPress={() => navigation.navigate('CreateGiftList', { data })} isDefault>Adicionar presentes</PrimaryBtn>
+        <PrimaryBtn onPress={handleSubmit(createEvent)} isDefault={false}>Adicionar convidados</PrimaryBtn>
         <Space />
       </List>
     </GlobalComponent>

@@ -13,7 +13,7 @@ import { ListProps } from '../MyEvents';
 import { TagButton } from '../../components/TagButton';
 import { EventCard } from '../../components/EventCard';
 import { List, EventCardsList } from '../MyEvents/styles';
-import ResearchInput from '../../components/ResearchInput';
+import SearchInput from '../../components/SearchInput';
 import { Checkbox } from '../../components/Checkbox';
 
 
@@ -96,7 +96,7 @@ export default function Home() {
 
   return (
     <GlobalApp>
-      <ResearchInput placeholder='Pesquise por evento, local ou interesse' />
+      <SearchInput placeholder='Pesquise por evento, local ou interesse' />
       <View>
         <FilterButtonList>
           <TagButton

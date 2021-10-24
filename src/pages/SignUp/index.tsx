@@ -16,6 +16,7 @@ import { Container, Form, Group, Row, Title } from './styles';
 interface User {
   email: string,
   name: string,
+  username: string,
   password: string,
 }
 
@@ -25,9 +26,10 @@ export default function SignUp() {
   const { control, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = async function (data: User): Promise<boolean> {
-    const { email, name, password } = data;
+    const { email, name, password, username } = data;
     const user: Parse.User = new Parse.User();
-    user.set('username', name);
+    user.set('username', username); //verify if username already exists
+    user.set('fullname', name);
     user.set('email', email);
     user.set('password', password);
 
@@ -59,6 +61,20 @@ export default function SignUp() {
                 onChangeText={value => onChange(value)}
                 value={value}
                 error={errors.name?.type === 'required'}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="username"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Nome de usuário (username)"
+                onBlur={onBlur}
+                onChangeText={value => onChange(value)}
+                value={value}
+                error={errors.username?.type === 'required'}
               />
             )}
           />
@@ -147,7 +163,7 @@ export default function SignUp() {
           </Group>
         </Form>
         <TextButton
-          onPress={() => {}}
+          onPress={() => { }}
           textToInfo="Já tem uma conta?"
           textToPress="Entrar" />
       </Container>

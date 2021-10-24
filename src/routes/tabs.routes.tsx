@@ -19,9 +19,11 @@ function getHeaderTitle(route: any) {
   const routeName = getFocusedRouteNameFromRoute(route) ?? 'CreateEvent';
   switch (routeName) {
     case 'CreateEvent':
-      return 'Criar Evento';
+      return 'CreateEvent';
     case 'CreateGiftList':
       return 'Sugestões de presentes';
+    case 'CreateGuest':
+      return 'Convidar amigos'
   }
 }
 
@@ -30,6 +32,7 @@ const CreateEventRoutes = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen  name="CreateEvent" component={Routes.CreateEvent} />
       <Stack.Screen name="CreateGiftList" component={Routes.CreateGiftList} />
+      <Stack.Screen name="CreateGuest" component={Routes.CreateGuest} />
     </Stack.Navigator>
   )
 }

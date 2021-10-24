@@ -11,13 +11,19 @@ import {
 } from './styles';
 import { TagButton } from '../TagButton';
 
-export interface Props {
-  nickName: string;
-  normalName: string;
+interface PeopleCardProps {
+  username: string;
+  fullname: string;
   buttonTitle: string;
+  handleButton: () => void;
 }
 
-export function PeopleCard({ nickName, normalName, buttonTitle }: Props) {
+export function PeopleCard({
+  username,
+  fullname,
+  buttonTitle,
+  handleButton
+}: PeopleCardProps) {
   return (
     <Card>
       {/* <PeopleImage
@@ -25,10 +31,11 @@ export function PeopleCard({ nickName, normalName, buttonTitle }: Props) {
       /> */}
       <PeopleInfo>
         <View>
-          <NickName>{nickName}</NickName>
-          <NormalName>{normalName}</NormalName>
+          <NickName>{username}</NickName>
+          <NormalName>{fullname}</NormalName>
         </View>
         <TagButton
+          handleButton={handleButton}
           textBtn={buttonTitle}
         />
       </PeopleInfo>

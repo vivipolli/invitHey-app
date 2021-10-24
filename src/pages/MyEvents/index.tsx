@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Parse from 'parse/react-native';
+
 import {
   Container,
   List,
@@ -22,48 +24,9 @@ export const data: ListProps[] = [
     paymentInfo: 'Pago',
     isActiveIcon: false,
   },
-  {
-    id: '2',
-    title: 'Fura Yhtya',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer facilisis libero nec vulputate pulvinar. Phasellus purus neque...',
-    hourInfo: '16h',
-    dateInfo: '06/07/1922',
-    paymentInfo: 'Pago',
-    isActiveIcon: false,
-  }, {
-    id: '3',
-    title: 'Fura Yhtya',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer facilisis libero nec vulputate pulvinar. Phasellus purus neque...',
-    hourInfo: '16h',
-    dateInfo: '06/07/1922',
-    paymentInfo: 'Pago',
-    isActiveIcon: false,
-  },
-  {
-    id: '4',
-    title: 'Fura Yhtya',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer facilisis libero nec vulputate pulvinar. Phasellus purus neque...',
-    hourInfo: '16h',
-    dateInfo: '06/07/1922',
-    paymentInfo: 'Pago',
-    isActiveIcon: false,
-  },
-  {
-    id: '5',
-    title: 'Fura Yhtya',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer facilisis libero nec vulputate pulvinar. Phasellus purus neque...',
-    hourInfo: '16h',
-    dateInfo: '06/07/1922',
-    paymentInfo: 'Pago',
-    isActiveIcon: false,
-  }
 ];
 
 export default function MeusEventos() {
-
-  const handleIcon = () => {
-    // to do: chancge icon state
-  }
 
   return (
     <Container>
