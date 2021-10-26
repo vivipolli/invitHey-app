@@ -21,13 +21,9 @@ export const theme: DefaultTheme = {
     smallFont: '16px', 
     smallestFont: '14px', 
     tinyFont: '12px',
-    light: 'Jost_300Light',
-    regular: 'Jost_400Regular',
-    medium: 'Jost_500Medium',
-    bold: 'Jost_600SemiBold'
-    // light: 'Roboto_300Light',
-    // medium: 'Roboto_500Medium',
-    // regular: 'Roboto_400Regular',
-    // bold: 'Roboto_700Bold',
+    light: 'Roboto_300Light',
+    medium: 'Roboto_500Medium',
+    regular: 'Roboto_400Regular',
+    bold: 'Roboto_700Bold',
   }
 }

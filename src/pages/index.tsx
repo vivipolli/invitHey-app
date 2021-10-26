@@ -1,8 +1,7 @@
 export { CreateEvent } from './CreateEvent'; 
-export { Invite } from './Invite';
 export { Followers } from './Followers';
 export { Event } from './Event';
-export {CreateGuest } from './CreateGuest';
+export { CreateGuest } from './CreateGuest';
 export { CreateGiftList } from './CreateGIftList';
 export { default as Home } from './Home';
 export { default as MyEvents } from './MyEvents';
