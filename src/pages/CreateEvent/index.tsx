@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Alert, Platform, TouchableOpacity } from 'react-native';
 
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Parse from 'parse/react-native';
+import { Card } from 'react-native-paper';
+import * as ImagePicker from 'expo-image-picker';
 
 import GlobalComponent from '../../components/GlobalApp';
 import ButtonSwitch from '../../components/ButtonSwitch';
@@ -28,6 +31,8 @@ import { StackParams } from '../../routes/routes.types';
 import { GiftProps } from '../CreateGIftList';
 import { GuestProps } from '../CreateGuest';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { convertDatetime } from '../../utils/convertDatetime';
+import { parsedObject } from '../../utils/parsedObject';
 
 type Address = {
   cep: string;
@@ -50,22 +55,18 @@ type EventProps = {
   city?: string;
   description: string;
   isPaid: boolean;
-  price?: string; 
+  price?: string;
   gifts?: GiftProps[];
   guests: GuestProps[];
 }
 
 export function CreateEvent() {
-  const [guests, setGuests] = useState();
-  const [gifts, setGifts] = useState();
-  const [data, setData] = useState();
+  const [banner, setBanner] = useState('');
   const [privacyType, setPrivacyType] = useState('private');
-
   const [typeEnabled, setTypeEnabled] = useState({
     private: true,
     public: false,
-  });
-
+  } as any);
   const [isPaid, setIsPaid] = useState(false);
 
   const navigation = useNavigation<StackNavigationProp<StackParams>>();
@@ -73,28 +74,36 @@ export function CreateEvent() {
   const route = useRoute();
   const { control, handleSubmit, formState: { errors } } = useForm();
 
-
-  useEffect(() => {
-    if (route.params) {
-      setGuests(route.params.guests);
-      setGifts(route.params.gifts);
-    }
-  }, [])
-
   function handleChange(type: string) {
     setTypeEnabled({ [type]: !typeEnabled[type] });
     setPrivacyType(type);
     console.log(typeEnabled);
   }
 
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true,
+    });
+    
+    if (!result.cancelled) {
+      const base64: string = result.base64 as string;
+      setBanner(base64);
+    }
+  };
+
   const createEvent = async function (data: EventProps): Promise<boolean> {
-    console.info(data);
-    console.info(guests);
-    console.info(gifts);
     try {
       let Event: Parse.Object = new Parse.Object('Event');
+      const parseFile = new Parse.File("banner.jpg", { base64: banner });
+      const responseFile = await parseFile.save();
+
+
       const currentUser = await Parse.User.currentAsync();
-      
+
       const address = {
         cep: data.cep,
         street: data.street,
@@ -102,21 +111,24 @@ export function CreateEvent() {
         vilage: data.vilage,
         state: data.state,
         city: data.city,
-      }      
+      }
+
+      const datetime = convertDatetime(data.datetime);
+
       Event.set('owner', currentUser?.get('username'));
       Event.set('type', privacyType);
       Event.set('name', data.name);
-      Event.set('datetime', data.datetime);
+      Event.set('datetime', datetime);
       Event.set('address', address);
       Event.set('description', data.description);
       Event.set('isPaid', isPaid);
-      Event.set('price', data.price);     
-    
+      Event.set('price', data.price);
+      Event.set('banner', responseFile);
 
       try {
-        const event = await Event.save();
-        const eventParsed = JSON.parse(JSON.stringify(event))
-        navigation.navigate('CreateGuest', { objectId: eventParsed.objectId });
+        const eventResult = await Event.save();
+        const event = parsedObject(eventResult);
+        navigation.navigate('CreateGuest', { event, currentUser: currentUser?.get('username') });
 
         console.info('success');
         return true;
@@ -131,7 +143,7 @@ export function CreateEvent() {
   };
 
   return (
-    <GlobalComponent>
+    <GlobalComponent route="CreateEvent">
       <List>
         <Title style={{ marginBottom: 20 }}>Seleção de Privacidade</Title>
         <Category>
@@ -157,6 +169,13 @@ export function CreateEvent() {
           <CategoryText>Evento para amigos de amigos</CategoryText>
         </Category> */}
 
+        <Title>Imagem de capa</Title>
+        <TouchableOpacity onPress={pickImage}>
+          <Card>
+            <Card.Cover source={{ uri: 'data:image/jpeg;base64,' + banner }} />
+          </Card>
+        </TouchableOpacity>
+
         <Separator />
 
         <Controller
@@ -179,38 +198,38 @@ export function CreateEvent() {
           <Controller
             control={control}
             rules={{ required: true }}
-            name="date"
+            name="datetime"
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                label="Data"
+                label="Data e Hora"
                 onBlur={onBlur}
-                placeholder="26/09/1991"
+                placeholder="26/09/1991 00:00:00"
                 onChangeText={value => onChange(value)}
                 value={value}
                 type='date'
                 width="50%"
-                error={errors.date?.type === 'required'}
+                error={errors.datetime?.type === 'required'}
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="cep"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Cep"
+                onBlur={onBlur}
+                keyboardType="numeric"
+                onChangeText={value => onChange(value)}
+                value={value}
+                width="45%"
+                placeholder="00000-000"
+                error={errors.cep?.type === 'required'}
               />
             )}
           />
         </FlexRow>
-
-        <Controller
-          control={control}
-          rules={{ required: true }}
-          name="cep"
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              label="Cep"
-              onBlur={onBlur}
-              keyboardType="numeric"
-              onChangeText={value => onChange(value)}
-              value={value}
-              placeholder="00000-000"
-              error={errors.cep?.type === 'required'}
-            />
-          )}
-        />
         <FlexRow>
           <Controller
             control={control}
@@ -398,8 +417,8 @@ export function CreateEvent() {
             <CategoryText>Nao</CategoryText>
           </Category>
         </FlexRow> */}
-        <PrimaryBtn onPress={() => navigation.navigate('CreateGiftList', { data })} isDefault>Adicionar presentes</PrimaryBtn>
-        <PrimaryBtn onPress={handleSubmit(createEvent)} isDefault={false}>Adicionar convidados</PrimaryBtn>
+        {/* <PrimaryBtn onPress={() => navigation.navigate('CreateGiftList', { data })} isDefault>Adicionar presentes</PrimaryBtn> */}
+        <PrimaryBtn onPress={handleSubmit(createEvent)} isDefault >Adicionar convidados</PrimaryBtn>
         <Space />
       </List>
     </GlobalComponent>

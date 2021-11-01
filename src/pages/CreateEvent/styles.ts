@@ -8,16 +8,18 @@ export const List = styled.ScrollView.attrs({
   showsVerticalScrollIndicator: false
 })`
     flex: 1;
-    padding-bottom: 30px;
+    padding: 20px;
+    
 `;
 
 export const Title = styled.Text`
-    ${(props) => {
+  margin-bottom: 10px;
+  ${(props) => {
     return `
-        color: ${props.theme.colors.darkGray};
-        font-size: ${props.theme.typography.smallestFont};
-        font-family: ${props.theme.typography.medium};
-        `
+      color: ${props.theme.colors.darkGray};
+      font-size: ${props.theme.typography.smallestFont};
+      font-family: ${props.theme.typography.medium};
+  `
   }}
 `;
 

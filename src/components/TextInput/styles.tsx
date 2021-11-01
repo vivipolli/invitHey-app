@@ -10,7 +10,7 @@ export const Container = styled.View`
 `
 
 export const MaskedInput = styled(TextInputMask)<InputProps>`
-  height: 50px;
+  height: 56px;
   width: 100%;
   border-radius: 40px;
   border-width: ${props => props.error ? 1 : 0}px;
@@ -36,7 +36,7 @@ export const Label = styled.Text<InputProps>`
     return `
       font-family: ${props.theme.typography.medium};
       color: ${props.error ? props.theme.colors.red : props.theme.colors.darkGray};
-      font-size: ${props.theme.typography.smallFont};
+      font-size: ${props.theme.typography.smallestFont};
       margin-bottom: 8px;
     `
   }}

@@ -2,7 +2,7 @@ import styled from '../../../styled-components';
 
 export const Container = styled.View`
   flex: 1;
-  padding: 16px 0;
+  padding: 20px;
 `
 
 export const FlexRow = styled.View`
@@ -16,10 +16,12 @@ export const FlexHeader = styled.View`
 `
 
 export const Avatar = styled.Image`
-  width: 56px;
-  height: 56px;
-  border-radius: 3px;
+  width: 100px;
+  height: 100px;
+  border-radius: 60px;
   margin-right: 16px;
+  border-width: 1px;
+  border-color: ${props => props.theme.colors.lightGray};
 `
 
 export const TextName = styled.Text`

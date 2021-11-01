@@ -4,11 +4,11 @@ import { Feather } from '@expo/vector-icons';
 
 export const Container = styled.View`
     background-color: ${(props) => props.theme.colors.white};
-    height: 56px;
+    height: 65px;
     width: 100%;
     flex-direction: row;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 20px;
 `;
 
 export const ArrowIcon = styled(Feather)`

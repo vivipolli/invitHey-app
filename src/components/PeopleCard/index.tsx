@@ -14,6 +14,7 @@ import { TagButton } from '../TagButton';
 interface PeopleCardProps {
   username: string;
   fullname: string;
+  avatar?: string;
   buttonTitle: string;
   handleButton: () => void;
 }
@@ -21,14 +22,15 @@ interface PeopleCardProps {
 export function PeopleCard({
   username,
   fullname,
+  avatar,
   buttonTitle,
   handleButton
 }: PeopleCardProps) {
   return (
     <Card>
-      {/* <PeopleImage
-        source={{ uri: 'https://avatars.githubusercontent.com/u/55644267?v=4' }}
-      /> */}
+      <PeopleImage
+        source={{ uri: avatar }}
+      />
       <PeopleInfo>
         <View>
           <NickName>{username}</NickName>

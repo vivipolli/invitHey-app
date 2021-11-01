@@ -1,41 +1,41 @@
 import React from 'react';
 
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-
 
 import * as Routes from '../pages';
-import { Header } from '../components/Header';
-import { HeaderHome } from '../pages/Home/HeaderHome';
-
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
-function getHeaderTitle(route: any) {
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'CreateEvent';
-  switch (routeName) {
-    case 'CreateEvent':
-      return 'CreateEvent';
-    case 'CreateGiftList':
-      return 'Sugestões de presentes';
-    case 'CreateGuest':
-      return 'Convidar amigos'
-  }
-}
-
 const CreateEventRoutes = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen  name="CreateEvent" component={Routes.CreateEvent} />
+      <Stack.Screen name="CreateEvent" component={Routes.CreateEvent} />
       <Stack.Screen name="CreateGiftList" component={Routes.CreateGiftList} />
       <Stack.Screen name="CreateGuest" component={Routes.CreateGuest} />
     </Stack.Navigator>
   )
-}
+};
+
+const ProfileRoutes = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Profile" component={Routes.Profile} />
+      <Stack.Screen name="Event" component={Routes.Event} />
+    </Stack.Navigator>
+  )
+};
+
+const EventsRoutes = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Home" component={Routes.Home} />
+      <Stack.Screen name="Event" component={Routes.Event} />
+    </Stack.Navigator>
+  )
+};
 
 export function Tabs() {
   return (
@@ -43,15 +43,15 @@ export function Tabs() {
       screenOptions={{
         tabBarInactiveTintColor: '#898D9A',
         tabBarActiveTintColor: '#FF7527',
-        tabBarShowLabel: false
+        tabBarShowLabel: false,    
       }}
+      
     >
       <Tab.Screen
-        name='Home'
-        component={Routes.Home}
+        name='EventsRoutes'
+        component={EventsRoutes}
         options={{
-          headerShown: true,
-          header: props => <HeaderHome />,
+          headerShown: false,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='home'
@@ -62,13 +62,13 @@ export function Tabs() {
         }}
       />
       <Tab.Screen
-        name='Seguidores'
-        component={Routes.CreateEvent}
+        name='Interesses'
+        component={Routes.Favorites}
         options={{
-          header: props => <Header page='Seguidores' />,
+          headerShown: false,
           tabBarIcon: (({ size, color }) => (
-            <MaterialIcons
-              name='event'
+            <MaterialCommunityIcons
+              name='heart'
               size={size}
               color={color}
             />
@@ -78,8 +78,8 @@ export function Tabs() {
       <Tab.Screen
         name='CreateEventRoutes'
         component={CreateEventRoutes}
-        options={({ route }) => ({
-          header: (props) => <Header page={getHeaderTitle(route) as string} />,
+        options={{
+          headerShown: false,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='add-circle-outline'
@@ -87,13 +87,13 @@ export function Tabs() {
               color={color}
             />
           ))
-        })}
+        }}
       />
       <Tab.Screen
-        name='Profile'
-        component={Routes.Profile}
+        name='ProfileRoutes'
+        component={ProfileRoutes}
         options={{
-          header: (props) => <Header page='Meu Perfil' />,
+          headerShown: false,
           tabBarIcon: (({ size, color }) => (
             <MaterialIcons
               name='person-outline'

@@ -1,83 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { useNavigation } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Parse from 'parse/react-native';
+import moment from 'moment';
+import 'moment/locale/pt-br';
 
 import { TouchableOpacity } from 'react-native';
+import { StackParams } from '../../routes/routes.types';
 
 import {
-    Card,
-    Icon,
-    CardHeader,
-    EventImage,
-    Hold,
-    TitleHeart,
-    CardTitle,
-    CardInfo,
-    Date,
-    Hour,
-    Payment,
-    Footer,
-    FooterText,
-    HourIcon,
-    PaymentIcon,
-    DateIcon,
-    Text
+  Card,
+  Icon,
+  EventImage,
+  Hold,
+  TitleHeart,
+  CardTitle,
+  CardInfo,
+  Date,
+  Footer,
+  DateIcon,
+  Text,
+  PinIcon
 } from './styles';
 
-export interface CardProps {
-    title: string;
-    datetime: string;
-    hourInfo?: string;
-    paymentInfo: string;
-    description: string;
-    isActiveIcon: boolean;
-    handleChangeIcon?: () => void;
+export type EventCardProps = {
+  title: string,
+  banner?: string,
+  datetime: string,
+  eventId: string,
+  city: string,
+  uf: string,
 }
 
-export function EventCard( { 
-    title, 
-    datetime, 
-    paymentInfo, 
-    hourInfo, 
-    description, 
-    isActiveIcon, 
-    handleChangeIcon 
-}: CardProps ) {
+export function EventCard({
+  title,
+  datetime,
+  eventId,
+  banner,
+  city,
+  uf,
+  
+}: EventCardProps) {
+  const navigation = useNavigation<StackNavigationProp<StackParams>>();
 
-    return (
-        <Card>
-            <CardHeader>
-                {/* <EventImage
-                    source={{uri: 'https://avatars.githubusercontent.com/u/55644267?v=4'}}
-                /> */}
-                <Hold>
-                    <TitleHeart>
-                        <CardTitle>{title}</CardTitle>
+  const [isActiveHeart, setIsActiveHeart] = useState(false);
 
-                        <TouchableOpacity onPress={handleChangeIcon}>
-                            <Icon isActiveIcon={isActiveIcon} name='heart'/>
-                        </TouchableOpacity>    
+  const newEvent = {
+    eventId,
+    datetime,
+    title,
+    banner,
+    city,
+    uf,
+  };
 
-                    </TitleHeart>
-                    <CardInfo>
-                        <Date>
-                            <DateIcon name="calendar-blank"  />
-                            <Text>{datetime}</Text>
-                        </Date>
-                        <Hour>
-                            <HourIcon name="clock-outline" />   
-                            <Text>{hourInfo}</Text>
-                        </Hour>
-                        <Payment>
-                            <PaymentIcon name="currency-usd" />
-                            <Text>{paymentInfo}</Text>
-                        </Payment>
-                    </CardInfo>
-                </Hold>
-            </CardHeader>
-            <Footer>
-                <FooterText>
-                    {description}
-                </FooterText>
-            </Footer>
-        </Card>
-    )
+  function openEventDetail() {
+    navigation.navigate('Event', { eventId })
+  }
+
+  async function handleFavoriteEvent() {
+    const currentUser = await Parse.User.currentAsync() as any;
+    const userParsed = JSON.parse(JSON.stringify(currentUser));
+
+    setIsActiveHeart((heart) => !heart);
+
+    let Favorit: Parse.Object = new Parse.Object('Favorit');
+
+    const query: Parse.Query = new Parse.Query('Favorit');
+    query.equalTo('userId', userParsed?.objectId);
+    const objects = await query.find();
+    try {
+      if (objects.length) {
+        const objectParsed = JSON.parse(JSON.stringify(objects[0]));
+        let events = objectParsed.events;
+        const objectId = objectParsed.objectId;
+
+        if (!isActiveHeart) {
+          events.push(newEvent);
+          Favorit.set('objectId', objectId);
+          Favorit.set('events', events);
+          try {
+            await Favorit.save();
+          } catch (error) {
+            console.error('Error', error);
+          }
+        } else {
+          const eventIndex = events.indexOf((item: any) => item.eventId === eventId);
+          events.splice(eventIndex, 1);
+          Favorit.set('objectId', objectId);
+          Favorit.set('events', events);
+          try {
+            await Favorit.save();
+          } catch (error) {
+            console.error('Error', error);
+          }
+        }
+      } else {
+        Favorit.set('events', [newEvent]);
+        Favorit.set('userId', userParsed?.objectId);
+        try {
+          await Favorit.save();
+        } catch (error) {
+          console.error('Error', error);
+        }
+      }
+    } catch (error) {
+      console.error('Error while retrieving object ', error);
+    }
+  }
+
+  return (
+    <Card>
+      <EventImage
+        source={{ uri: banner }}
+      />
+      <Hold>
+        <TitleHeart>
+          <CardTitle onPress={openEventDetail}>{title}</CardTitle>
+          <TouchableOpacity onPress={handleFavoriteEvent}>
+            <Icon isActiveIcon={isActiveHeart} name='heart' />
+          </TouchableOpacity>
+        </TitleHeart>
+        <CardInfo>
+          <Date>
+            <DateIcon name="calendar-blank" />
+            <Text>{moment(datetime).format('LLLL')}</Text>
+          </Date>
+          <Footer>
+            <PinIcon name="location-pin" />
+            <Text>{`${city}/${uf}`}</Text>
+          </Footer>
+        </CardInfo>
+      </Hold>
+    </Card>
+  )
 }

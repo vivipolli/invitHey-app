@@ -1,11 +1,19 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ],
     "name": "invitHey",
     "slug": "invitHey",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "sdkVersion": "40.0.0",
+    "sdkVersion": "41.0.0",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
