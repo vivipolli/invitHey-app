@@ -15,8 +15,8 @@ interface PeopleCardProps {
   username: string;
   fullname: string;
   avatar?: string;
-  buttonTitle: string;
-  handleButton: () => void;
+  buttonTitle?: string;
+  handleButton?: () => void;
 }
 
 export function PeopleCard({
@@ -29,17 +29,19 @@ export function PeopleCard({
   return (
     <Card>
       <PeopleImage
-        source={{ uri: avatar }}
+        source={{ uri: avatar || undefined }}
       />
       <PeopleInfo>
         <View>
           <NickName>{username}</NickName>
           <NormalName>{fullname}</NormalName>
         </View>
-        <TagButton
-          handleButton={handleButton}
-          textBtn={buttonTitle}
-        />
+        {buttonTitle &&
+          <TagButton
+            handleButton={handleButton!}
+            textBtn={buttonTitle}
+          />
+        }
       </PeopleInfo>
     </Card>
   );

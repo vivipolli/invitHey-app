@@ -27,7 +27,7 @@ export const Separator = styled.View`
   padding: 0 20px 20px 0;
 `;
 
-export const ConfirmArea = styled.View`
+export const ConfirmArea = styled.TouchableOpacity`
   align-items: center;
   flex-direction: row;
   padding: 8px 16px;

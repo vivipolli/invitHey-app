@@ -18,6 +18,7 @@ import { parsedObject } from '../../utils/parsedObject';
 import { ListSpace } from '../Profile/styles';
 import { EventProps } from '../Event';
 import { refresh } from '../../utils/refresh';
+import { Loading } from '../../components/Loading';
 
 export default function Home() {
   const filter = {
@@ -29,8 +30,8 @@ export default function Home() {
 
   const [filterActive, setFilterActive] = useState('all');
   const [events, setEvents] = useState([] as EventProps[]);
-
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   function handleFilterActive(type: string) {
     setFilterActive(type);
@@ -45,6 +46,8 @@ export default function Home() {
     } catch (error: any) {
       Alert.alert('Error!', error.message);
       return false;
+    } finally {
+      setLoading(false);
     };
   }
 
@@ -95,26 +98,28 @@ export default function Home() {
             />
           </FilterButtonList>
         </View>
-        <List>
-          <EventCardsList
-            data={events}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            renderItem={({ item }) => {
-              const event = parsedObject(item);
-              return (
-                <EventCard
-                  title={event.name}
-                  datetime={event.datetime}
-                  eventId={event.objectId}
-                  city={event.address.city}
-                  uf={event.address.state}
-                  banner={event.banner?.url}
-                />
-              )
-            }}
-            keyExtractor={(item, index) => { return parsedObject(item).objectId }}
-          />
-        </List>
+        {loading ? <Loading /> :
+          <List>
+            <EventCardsList
+              data={events}
+              refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+              renderItem={({ item }) => {
+                const event = parsedObject(item);
+                return (
+                  <EventCard
+                    title={event.name}
+                    datetime={event.datetime}
+                    eventId={event.objectId}
+                    city={event.address.city}
+                    uf={event.address.state}
+                    banner={event.banner?.url}
+                  />
+                )
+              }}
+              keyExtractor={(item, index) => { return parsedObject(item).objectId }}
+            />
+          </List>
+        }
       </Container>
     </View>
   );

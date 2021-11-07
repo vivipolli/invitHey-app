@@ -42,9 +42,15 @@ export function CreateGuest() {
   async function inviteUser(user: GuestProps) {
     let Invite: Parse.Object = new Parse.Object('Invite');
 
+    const eventPointer = {
+      __type: 'Pointer',
+      className: 'Event',
+      objectId: event.objectId,
+    }
+
     Invite.set('userId', user.objectId);
     Invite.set('inviteBy', currentUser);
-    Invite.set('event', event);
+    Invite.set('event', eventPointer);
 
     try {
       await Invite.save();
@@ -56,18 +62,18 @@ export function CreateGuest() {
   }
 
   function handleGuest(user: GuestProps) {
-    // const invited = guests.findIndex((elem) => elem.username === user.username);
+    const invited = guests.findIndex((elem) => elem.username === user.username);
 
-    // if (invited !== -1) {
-    //   const field = guests.filter(item => item.username !== user.username);
-    //   setGuests(field);
-    // } else {
+    if (invited !== -1) {
+      const field = guests.filter(item => item.username !== user.username);
+      setGuests(field);
+    } else {
       const newGuest = [...guests];
       user.accepted = false;
       newGuest.push(user);
       setGuests(newGuest);
       inviteUser(user);
-    // }
+    }
   };
 
   const getUsers = async function (): Promise<Boolean> {

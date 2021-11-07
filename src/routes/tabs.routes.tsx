@@ -33,6 +33,8 @@ const EventsRoutes = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Routes.Home} />
       <Stack.Screen name="Event" component={Routes.Event} />
+      <Stack.Screen name="ConfirmedPeople" component={Routes.ConfirmedPeople} />
+
     </Stack.Navigator>
   )
 };
@@ -63,12 +65,12 @@ export function Tabs() {
       />
       <Tab.Screen
         name='Interesses'
-        component={Routes.Favorites}
+        component={Routes.Invites}
         options={{
           headerShown: false,
           tabBarIcon: (({ size, color }) => (
             <MaterialCommunityIcons
-              name='heart'
+              name='bell'
               size={size}
               color={color}
             />

@@ -7,4 +7,5 @@ export type StackParams = {
   CreateGuest: { event: EventProps, currentUser: string };
   Event: { eventId: string };
   Home: undefined;
+  ConfirmedPeople: { inviters: any}
 }
