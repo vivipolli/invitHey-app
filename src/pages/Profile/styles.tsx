@@ -1,4 +1,5 @@
 import styled from '../../../styled-components';
+import { MaterialIcons } from '@expo/vector-icons';
 
 export const Container = styled.View`
   flex: 1;
@@ -13,6 +14,7 @@ export const FlexRow = styled.View`
 
 export const FlexHeader = styled.View`
   flex-direction: row;
+  align-items: flex-start;
 `
 
 export const Avatar = styled.Image`
@@ -34,6 +36,14 @@ export const TextName = styled.Text`
   }}
 `
 
+export const Icon = styled(MaterialIcons)`
+  ${(props) => {
+  return `
+    color: ${(props.theme.colors.darkGray)};
+  `
+}}
+`;
+
 export const NickName = styled.Text`
   ${(props) => {
     return`
@@ -44,7 +54,31 @@ export const NickName = styled.Text`
   }}
 `
 
+export const InfoText = styled.Text`
+  width: 30%;
+  text-align: left;
+  ${(props) => {
+    return`
+    color: ${props.theme.colors.textGray};
+    font-size: 12px;
+    font-family: ${props.theme.typography.regular};
+    `
+  }}
+`
+
+export const TextBio = styled.Text`
+  margin-top: 20px;
+  ${(props) => {
+    return`
+    color: ${props.theme.colors.textGray};
+    font-size: 13px;
+    font-family: ${props.theme.typography.regular};
+    `
+  }}
+`
+
 export const LargeTitle = styled.Text`
+  margin-top: 30px;
   ${(props) => {
     return`
     color: ${props.theme.colors.darkGray};
@@ -57,3 +91,33 @@ export const LargeTitle = styled.Text`
 export const ListSpace = styled.View`
   margin-right: 10px;
 `
+
+
+export const ButtonModal = styled.TouchableOpacity.attrs({
+  activeOpacity: .6
+})`
+  position: absolute;
+  right: 0;
+`;
+
+export const ModalIcon = styled(MaterialIcons)`
+  ${(props) => {
+  return `
+    color: ${(props.theme.colors.darkGray)};
+  `
+}}
+`;
+
+export const HeaderBio = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 30px 20px;
+`
+
+export const HeaderCheckIcon = styled(MaterialIcons)`
+  ${(props) => {
+  return `
+    color: ${(props.theme.colors.secondary)};
+  `
+}}
+`;

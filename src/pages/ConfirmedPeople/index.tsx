@@ -13,6 +13,7 @@ import SearchInput from '../../components/SearchInput';
 import { Container, PeopleCardList } from './styles';
 import PrimaryBtn from '../../components/PrimaryBtn';
 import { StackParams } from '../../routes/routes.types';
+import { parsedObject } from '../../utils/parsedObject';
 
 export interface UserProps {
   id: string;
@@ -50,7 +51,7 @@ export function ConfirmedPeople() {
         <PeopleCardList
           data={inviters}
           renderItem={({ item }) => {
-            const user = JSON.parse(JSON.stringify(item))
+            const user = parsedObject(item);
             return (<PeopleCard
               username={user.username}
               avatar={user.avatar?.url}
@@ -58,7 +59,7 @@ export function ConfirmedPeople() {
             />)
           }
           }
-          keyExtractor={item => item.id}
+          keyExtractor={item => parsedObject(item).objectId}
         />
       </Container>
     </GlobalComponent>

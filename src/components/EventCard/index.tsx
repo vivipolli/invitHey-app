@@ -6,7 +6,7 @@ import Parse from 'parse/react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, TouchableOpacityBase } from 'react-native';
 import { StackParams } from '../../routes/routes.types';
 
 import {
@@ -21,7 +21,8 @@ import {
   Footer,
   DateIcon,
   Text,
-  PinIcon
+  PinIcon,
+  HeartIcon
 } from './styles';
 
 export type EventCardProps = {
@@ -40,7 +41,7 @@ export function EventCard({
   banner,
   city,
   uf,
-  
+
 }: EventCardProps) {
   const navigation = useNavigation<StackNavigationProp<StackParams>>();
 
@@ -112,15 +113,17 @@ export function EventCard({
 
   return (
     <Card>
-      <EventImage
-        source={{ uri: banner }}
-      />
+      <TouchableOpacity activeOpacity={0.8} onPress={openEventDetail}>
+        <EventImage
+          source={{ uri: banner }}
+        />
+      </TouchableOpacity>
       <Hold>
         <TitleHeart>
-          <CardTitle onPress={openEventDetail}>{title}</CardTitle>
-          <TouchableOpacity onPress={handleFavoriteEvent}>
+          <CardTitle>{title}</CardTitle>
+          <HeartIcon onPress={handleFavoriteEvent}>
             <Icon isActiveIcon={isActiveHeart} name='heart' />
-          </TouchableOpacity>
+          </HeartIcon>
         </TitleHeart>
         <CardInfo>
           <Date>

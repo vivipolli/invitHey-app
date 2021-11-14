@@ -6,7 +6,10 @@ type GroupProps = {
 
 export const Container = styled.View`
   align-items: center;
-  padding: 50px 20px;
+  padding: 180px 25px;
+  justify-content: space-around;
+  flex-direction: column;
+  flex: 1;
 `
 
 export const Form = styled.View`

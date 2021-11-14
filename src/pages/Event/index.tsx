@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Modal, TouchableOpacity, Alert } from 'react-native';
 
 import Parse from 'parse/react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
+import { Button } from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 
@@ -35,13 +36,16 @@ import {
   GeneralInfo,
   MainText,
   Main,
-  MainOption
+  MainOption,
+  ModalContainer
 
 } from './styles';
 import { parsedObject } from '../../utils/parsedObject';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StackParams } from '../../routes/routes.types';
 import { Loading } from '../../components/Loading';
+import { userPointer } from '../../utils/pointers';
+import BottomModal from '../../components/Modal';
 
 const icons = {
   calendar: 'calendar-today',
@@ -70,6 +74,7 @@ export type EventProps = {
   eventId: string,
   address: Address,
   owner: string,
+  type?: string,
   description: string,
   guests?: GuestProps[],
 }
@@ -96,74 +101,111 @@ export function Event() {
   const [peopleConfirmed, setPeopleConfirmed] = useState([] as GuestProps[]);
   const [confirmed, setConfirmed] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [inviteId, setInviteId] = useState('');
+  const [user, setUser] = useState({} as UserProps);
 
   const navigation = useNavigation<StackNavigationProp<StackParams>>();
   const route = useRoute();
+
   const { eventId }: any = route.params;
+
+  console.info(eventId);
+
+  const eventPointer = {
+    __type: 'Pointer',
+    className: 'Event',
+    objectId: eventId,
+  }
 
   function handleFilterActive(type: string) {
     navigation.navigate("ConfirmedPeople", { inviters: peopleConfirmed })
   }
 
+  function myCurrentEvent(invites: any) {
+    const invitesParsed = parsedObject(invites);
+    const invite = invitesParsed.find((invite: any) => invite.event.objectId === eventId);
+    return invite;
+  }
+
   const getEvent = async function (): Promise<boolean> {
     const parseQuery: Parse.Query = new Parse.Query('Event');
-    const currentUser: UserProps = await Parse.User.currentAsync() as unknown as UserProps;
-    const userParsed = parsedObject(currentUser);
     parseQuery.equalTo('objectId', eventId);
 
+    const currentUser: UserProps = await Parse.User.currentAsync() as unknown as UserProps;
+    const userParsed = parsedObject(currentUser);
+    setUser(userParsed);
 
     try {
       let event: Parse.Object[] = await parseQuery.find();
-      const eventParsed = JSON.parse(JSON.stringify(event[0]));
-      const guestIndex = eventParsed.guests && eventParsed.guests?.findIndex((guest: GuestProps) => guest.objectId === userParsed.objectId) as any;
-      console.info(`index ${guestIndex}`)
-      const isAcceptedByMe = (guestIndex !== -1 && (guestIndex !== undefined)) ? eventParsed.guests[guestIndex].accepted : false;
-      console.info(isAcceptedByMe);
-      const peopleConfirmed: GuestProps[] = eventParsed.guests!.filter((guest: any) => guest.accepted);
-      setPeopleConfirmed(peopleConfirmed);
-      setConfirmed(isAcceptedByMe);
+      const eventParsed = parsedObject(event[0]);
+
+      const userInviteQuery: Parse.Query = new Parse.Query('Invite');
+
+      userInviteQuery.equalTo('user', userPointer(user.objectId));
+
+      await userInviteQuery
+        .find()
+        .then(async (invites: any) => {
+          const invite = myCurrentEvent(invites);
+          if (invite && invite.accepted) {
+            setConfirmed(true);
+            setInviteId(invite.objectId);
+          } else {
+            setConfirmed(false);
+            setInviteId(invite?.objectId);
+          }
+        });
+
+      const peopleInviteQuery: Parse.Query = new Parse.Query('Invite');
+      peopleInviteQuery.equalTo('event', eventPointer);
+
+      await peopleInviteQuery
+        .find()
+        .then(async (invites: any) => {
+          const inviteParsed = parsedObject(invites);
+          const inviters = inviteParsed.filter((invite: any) => invite.accepted);
+
+          const usersAcceppted = inviters.map((invite: any) => invite.user);
+          setPeopleConfirmed(usersAcceppted);
+        }).catch((err) => console.info(err))
+
       setEvent(eventParsed);
       setLoading(false);
       return true;
+
     } catch (error: any) {
       Alert.alert('Error!', error.message);
       return false;
     };
   };
 
-  const handleConfirmEvent = async function (): Promise<boolean> {
-    setConfirmed((check) => !check);
-    let Event: Parse.Object = new Parse.Object('Event');
-    const parseQuery: Parse.Query = new Parse.Query('Event');
-    parseQuery.equalTo('objectId', eventId);
-    const currentUser: UserProps = await Parse.User.currentAsync() as unknown as UserProps;
-    const userParsed = parsedObject(currentUser);
+  const acceptInvite = async function () {
+    let Invite: Parse.Object = new Parse.Object('Invite');
+    const inviteQuery: Parse.Query = new Parse.Query('Invite');
+    inviteQuery.equalTo('user', userPointer(user.objectId));
 
-    const guestIndex = event.guests?.findIndex((guest: GuestProps) => guest.objectId === userParsed.objectId) as any;
-    const guests: GuestProps[] = event.guests!;
-    let newGuests = [...guests];
-
-    if (guestIndex === -1) {
-      if (!confirmed) {
-        const newGuest: GuestProps = {
-          accepted: true,
-          ...currentUser,
-        }
-        newGuests.concat(newGuest);
+    if (inviteId) {
+      Invite.set('objectId', inviteId);
+      Invite.set('accepted', !confirmed);
+      try {
+        await Invite.save();
+        return true;
+      } catch (error) {
+        console.info(error)
+        return false;
       }
-
     } else {
-      newGuests[guestIndex] = { ...newGuests[guestIndex], accepted: !newGuests[guestIndex].accepted }
+      Invite.set('accepted', true);
+      Invite.set('user', userPointer(user.objectId));
+      Invite.set('event', eventPointer);
+      Invite.set('inviteBy', 'self');
+      await Invite.save().then(() => { return true }).catch((error) => Alert.alert('Error!', error.message));
     }
-    Event.set('objectId', eventId);
-    Event.set('guests', newGuests);
-    try {
-      const event = await Event.save();
-      return true;
-    } catch (error) {
-      console.info(error)
-      return false;
-    }
+  }
+
+  const handleConfirmEvent = () => {
+    setConfirmed((check) => !check);
+    acceptInvite();
   }
 
   useEffect(() => {
@@ -229,22 +271,26 @@ export function Event() {
             </Description>
           </GeneralInfo>
 
-          <Modal visible={modalOpen} animationType='slide' transparent={true} >
-            <ModalView >
-              <ButtonModal onPress={() => setModalOpen(false)} >
-                <Icon name={icons.close} />
-              </ButtonModal>
-              <Main>
-                <MainOption onPress={() => { }}>
-                  <MainText>Convidar Amigo</MainText>
-                  <Icon name={icons.chevronRight} />
-                </MainOption>
-                <MainOption onPress={() => { }}>
-                  <MainText>Compartilhar</MainText>
-                  <Icon name={icons.chevronRight} />
-                </MainOption>
-              </Main>
-            </ModalView>
+          <Modal visible={modalOpen} animationType='fade' transparent={true} >
+            <ModalContainer>
+              <ModalView >
+                <ButtonModal onPress={() => setModalOpen(false)} >
+                  <Icon name={icons.close} />
+                </ButtonModal>
+                <Main>
+                  <MainOption
+                     onPress={
+                       () => navigation.navigate("InviteFriends", { peopleConfirmed: peopleConfirmed, event, currentUser: user })}>
+                    <MainText>Convidar Amigo</MainText>
+                    <Icon name={icons.chevronRight} />
+                  </MainOption>
+                  <MainOption onPress={() => { }}>
+                    <MainText>Compartilhar</MainText>
+                    <Icon name={icons.chevronRight} />
+                  </MainOption>
+                </Main>
+              </ModalView>
+            </ModalContainer>
           </Modal>
         </>
       }

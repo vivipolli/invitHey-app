@@ -15,13 +15,14 @@ export const FilterButtonList = styled.ScrollView.attrs({
 
 
 export const List = styled.View`
-    flex: 1;
-    margin-top: 24px;
+  flex: 1;
+  margin-top: 24px;
 `;
 
 export const Container = styled.View`
   flex: 1;
   padding: 20px;
+  background-color: #FCFCFC;
 `;
 
 

@@ -8,14 +8,20 @@ import {
   Platform,
   TouchableOpacity,
   RefreshControl,
+  Modal,
+  TouchableOpacityBase,
 } from 'react-native';
+
+import { TextInput } from 'react-native-paper';
 
 import Parse from 'parse/react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Restart } from 'fiction-expo-restart';
 
 import { EventCard, EventCardProps } from '../../components/EventCard';
 import GlobalComponent from '../../components/GlobalApp';
 import { TagButton } from '../../components/TagButton';
+import avatarDefault from '../../assets/images/avatar.png';
 
 import {
   Avatar,
@@ -25,26 +31,45 @@ import {
   FlexRow,
   LargeTitle,
   ListSpace,
-  FlexHeader
+  FlexHeader,
+  ButtonModal,
+  Icon,
+  TextBio,
+  ModalIcon,
+  InfoText,
+  HeaderCheckIcon,
+  HeaderBio
 } from './styles';
 import { UserProps } from '../CreateGuest';
 import { parsedObject } from '../../utils/parsedObject';
 import { refresh } from '../../utils/refresh';
+import { List } from '../Home/styles';
+import { EventProps } from '../Event';
+import { InviteProps } from '../Notifications';
+import { Loading } from '../../components/Loading';
+import { userPointer } from '../../utils/pointers';
+import { Main, MainOption, MainText, ModalContainer, ModalView } from '../Event/styles';
+import { useDispatch, useSelector } from 'react-redux';
+import { UserInfo } from '../../state/types/user.types';
+import { State } from '../../state/types/general.types';
+import { currentUserAction } from '../../state/actions/user.action';
 
 export default function Profile() {
   const [btnActive, setBtnActive] = useState('');
   const [image, setImage] = useState('');
-  const [user, setUser] = useState({
-    username: '',
-    fullname: '',
-    avatar: {
-      url: '',
-    },
-    objectId: '',
-  });
-  const [filterActive, setFilterActive] = useState('all');
+
+  const [filterActive, setFilterActive] = useState('created');
   const [data, setData] = useState([] as EventCardProps[]);
   const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [listLoading, setListLoading] = useState(false);
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [openBio, setOpenBio] = useState(false);
+  const [bio, setBio] = useState('');
+
+  const user: UserInfo = useSelector((state: State) => state.user);
+  const dispatch = useDispatch();
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
@@ -81,40 +106,54 @@ export default function Profile() {
         const responseFile = await parseFile.save();
         User.set('objectId', user.objectId);
         User.set('avatar', responseFile);
+        console.info(responseFile);
         await User.save();
+        setModalOpen(false);
+        dispatch(currentUserAction({ ...user, avatar: responseFile }));
       } catch (error: any) {
         console.error('Error', error);
       }
     }
+  };
 
+  const EditBio = async () => {
+    let User: Parse.User = new Parse.User();
+    try {
+      User.set('objectId', user.objectId);
+      User.set('bio', bio);
+      await User.save();
+      dispatch(currentUserAction({ ...user, bio }));
+      setOpenBio(false);
+    } catch (error: any) {
+      console.error('Error', error);
+    }
   };
 
   const filter = {
-    all: 'all',
     created: 'created',
     participating: 'participating',
     following: 'following',
   }
 
-  function handleBtnActive(type: string) {
-    setBtnActive(type);
-  }
-
   const getInitialData = async function () {
-    const currentUser = await Parse.User.currentAsync() as unknown as UserProps;
-    const userParsed = JSON.parse(JSON.stringify(currentUser));
-    currentUser && setUser(userParsed);
+    setImage(user.avatar?.url);
 
-    setImage(userParsed.avatar?.url);
-
-    const parseQuery: Parse.Query = new Parse.Query('Event');
+    const query: Parse.Query = new Parse.Query('Event');
     try {
-      let all = await parseQuery.find() as unknown as EventCardProps[];
-      setData(all);
-      return true;
+      query.equalTo('owner', user.username);
+      return await query
+        .find()
+        .then(async (myEvents: any) => {
+          setData(myEvents);
+          return true;
+        })
+        .catch((error: any) => {
+          return false;
+        });
     } catch (error: any) {
-      Alert.alert('Error!', error.message);
       return false;
+    } finally {
+      setLoading(false);
     };
   }
 
@@ -123,19 +162,18 @@ export default function Profile() {
   }, []);
 
   const handleFilterActive = async function (type: string): Promise<Boolean> {
+    setListLoading(true);
     setFilterActive(type);
     const query: Parse.Query = new Parse.Query('Event');
+    const invite: Parse.Query = new Parse.Query('Invite');
 
     try {
-      let events = await query.find() as unknown as EventCardProps[];
-      if (type === 'all') {
-        setData(events);
-      } else if (type === 'created') {
+      if (type === 'created') {
         query.equalTo('owner', user.username);
         return await query
           .find()
           .then(async (myEvents: any) => {
-            setData(myEvents);
+            setData(parsedObject(myEvents));
             return true;
           })
           .catch((error: any) => {
@@ -143,35 +181,74 @@ export default function Profile() {
             return false;
           });
 
-      } else {
-        //participating
-        const eventsParsed = JSON.parse(JSON.stringify(events));
-        const participating = eventsParsed.filter((event: any) => event.guests.filter((guest: any) => guest.username === user.username));
-        setData(participating);
+      } else if (type === 'participating') {
+        invite.equalTo('user', userPointer(user.objectId));
+        return await invite
+          .find()
+          .then(async (invites: any) => {
+            const invitesParsed = parsedObject(invites);
+            const participating = invitesParsed.filter((invite: InviteProps) => invite.accepted);
+            setData(participating);
+            return true;
+          })
+          .catch((error: any) => {
+            Alert.alert('Error!', error.message);
+            return false;
+          });
       }
-
       return true;
     } catch (error: any) {
       console.info(error);
       return false;
+    } finally {
+      setListLoading(false);
     };
+  };
 
+  const signOut = async function () {
+    return await Parse.User.logOut()
+      .then(async () => {
+        const currentUser = await Parse.User.currentAsync();
+        Restart();
+        return true;
+      })
+      .catch((error) => {
+        Alert.alert('Error!', error.message);
+        return false;
+      })
+  };
+
+  const handleLogOut = async function () {
+    Alert.alert('Logout', 'Deseja sair do InvitHey?',
+      [
+        {
+          text: 'Não',
+          style: 'cancel'
+        },
+        {
+          text: 'Sim',
+          onPress: () => signOut()
+        },
+      ]);
   };
 
   return (
     <GlobalComponent route="Profile">
-      <Container>
-        <FlexHeader>
-          <TouchableOpacity onPress={pickImage}>
-            <Avatar source={{ uri: image }} />
-          </TouchableOpacity>
-          <View>
-            <TextName>{user.fullname}</TextName>
-            <NickName>{user.username}</NickName>
-          </View>
-        </FlexHeader>
+      {loading ? <Loading /> :
+        <Container>
+          <FlexHeader>
+            <Avatar source={image ? { uri: image } : avatarDefault} />
+            <View>
+              <TextName>{user.fullname}</TextName>
+              <NickName>{user.username}</NickName>
+            </View>
+            <ButtonModal onPress={() => setModalOpen((open) => !open)}>
+              <Icon size={25} name="more-vert" />
+            </ButtonModal>
+          </FlexHeader>
+          <TextBio>{user?.bio}</TextBio>
 
-        <FlexRow>
+          {/* <FlexRow>
           <TagButton
             isActive={btnActive === 'followers'}
             handleButton={() => handleBtnActive('followers')}
@@ -180,21 +257,13 @@ export default function Profile() {
             isActive={btnActive === 'following'}
             handleButton={() => handleBtnActive('following')}
             textBtn="Seguindo (240)" />
-        </FlexRow>
-
-        <View>
+        </FlexRow> */}
           <LargeTitle>
             Meus Eventos
           </LargeTitle>
 
           <FlexRow>
             <ScrollView horizontal>
-              <TagButton
-                isActive={filterActive === filter.all}
-                handleButton={() => handleFilterActive(filter.all)}
-                textBtn="Todos" />
-              <ListSpace />
-
               <TagButton
                 isActive={filterActive === filter.created}
                 handleButton={() => handleFilterActive(filter.created)}
@@ -207,36 +276,91 @@ export default function Profile() {
                 textBtn="Participando" />
               <ListSpace />
 
-              <TagButton
-                isActive={filterActive === filter.following}
-                handleButton={() => handleFilterActive(filter.following)}
-                textBtn="Seguindo" />
+              {/* <TagButton
+              isActive={filterActive === filter.following}
+              handleButton={() => handleFilterActive(filter.following)}
+              textBtn="Favoritos" /> */}
             </ScrollView>
           </FlexRow>
 
-          <FlatList
-            data={data}
-            showsVerticalScrollIndicator={false}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-            renderItem={({ item }) => {
-              const event = JSON.parse(JSON.stringify(item))
-              return (
-                <EventCard
-                  title={event.name}
-                  datetime={event.datetime}
-                  eventId={event.objectId}
-                  banner={event.banner?.url}
-                  uf={event.address.state}
-                  city={event.address.city}
-                />
-              )
-            }
-            }
-            keyExtractor={(item, index) => { return parsedObject(item).objectId }}
-          />
+          {listLoading ? <Loading /> :
+            <List>
+              <FlatList
+                data={data}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+                renderItem={({ item }) => {
+                  const parsedData = parsedObject(item);
+                  const event = filterActive === filter.participating ? parsedData.event : parsedData;
+                  return (
+                    <EventCard
+                      title={event?.name}
+                      datetime={event?.datetime}
+                      eventId={event?.objectId}
+                      banner={event?.banner?.url}
+                      uf={event?.address?.state}
+                      city={event?.address?.city}
+                    />
+                  )
+                }
+                }
+                keyExtractor={(item, index) => { return parsedObject(item).objectId }}
+              />
+            </List>
+          }
+        </Container>
+      }
+      <Modal visible={modalOpen} animationType='fade' transparent={true} >
+        <ModalContainer>
+          <ModalView >
+            <TouchableOpacity onPress={() => setModalOpen(false)} >
+              <ModalIcon name="close" />
+            </TouchableOpacity>
+            <Main>
+              <MainOption onPress={pickImage}>
+                {/* <ModalIcon name="person" /> */}
+                <MainText>Avatar</MainText>
+                <InfoText>Adicionar/editar</InfoText>
+                <ModalIcon name="chevron-right" />
+              </MainOption>
+              <MainOption onPress={() => {
+                setOpenBio(true);
+                setModalOpen(false);
+              }}>
+                {/* <ModalIcon name="edit" /> */}
+                <MainText>Bio</MainText>
+                <InfoText>Adicionar/editar</InfoText>
+                <ModalIcon name="chevron-right" />
+              </MainOption>
+              <MainOption onPress={handleLogOut}>
+                {/* <ModalIcon name="logout" /> */}
+                <MainText>Logout</MainText>
+                <InfoText>Sair da conta</InfoText>
+                <ModalIcon name="chevron-right" />
+              </MainOption>
+            </Main>
+          </ModalView>
+        </ModalContainer>
+      </Modal>
+      <Modal visible={openBio} animationType='fade' transparent={false} >
+        <HeaderBio>
+          <TouchableOpacity onPress={() => setOpenBio(false)}>
+            <ModalIcon size={30} name="close" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={EditBio}>
+            <HeaderCheckIcon size={30} name="check" />
+          </TouchableOpacity>
 
-        </View>
-      </Container>
+        </HeaderBio>
+        <TextInput
+          placeholder="Conte mais sobre você"
+          numberOfLines={2}
+          multiline
+          defaultValue={user?.bio}
+          onChangeText={(text) => setBio(text)}
+          style={{ backgroundColor: '#fff' }}
+          theme={{ colors: { primary: '#FF7527', text: 'gray' }, }}
+          right={<TextInput.Affix text="/100" />} onPressIn={undefined} onPressOut={undefined} />
+      </Modal>
     </GlobalComponent >
   );
 }

@@ -77,7 +77,6 @@ export function CreateEvent() {
   function handleChange(type: string) {
     setTypeEnabled({ [type]: !typeEnabled[type] });
     setPrivacyType(type);
-    console.log(typeEnabled);
   }
 
   const pickImage = async () => {

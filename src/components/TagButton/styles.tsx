@@ -10,7 +10,7 @@ export const Btn = styled.TouchableOpacity<BtnProps>`
     height: 32px;
     padding: 0 25px;
     background-color: ${(props) => props.isActive ?
-      props.theme.colors.darkGray
+      props.theme.colors.primary
       :
       props.theme.colors.lightGray
     };

@@ -13,7 +13,24 @@ import { refresh } from '../../utils/refresh';
 import { parsedObject } from '../../utils/parsedObject';
 import { Loading } from '../../components/Loading';
 
-export default function Invites() {
+
+export type InviteProps = {
+  accepted?: boolean,
+  userId: string,
+  event: any,
+  inviteBy?: string,
+  viewed?: boolean,
+}
+
+const userPointer = (userId: string) => {
+  return ({
+    __type: 'Pointer',
+    className: '_User',
+    objectId: userId,
+  })
+};
+
+export default function Notifications() {
   const [data, setData] = useState([] as EventCardProps[]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -23,7 +40,7 @@ export default function Invites() {
     const userParsed = parsedObject(currentUser);
 
     const query: Parse.Query = new Parse.Query('Invite');
-    query.equalTo('userId', userParsed.objectId);
+    query.equalTo('user', userPointer(userParsed.objectId));
 
     try {
       const results: EventCardProps[] = await query.find() as unknown as EventCardProps[];
@@ -47,7 +64,7 @@ export default function Invites() {
 
 
   return (
-    <GlobalComponent route="Invites">
+    <GlobalComponent route="Notifications">
       <Container>
         {loading ? <Loading /> :
           <FlatList

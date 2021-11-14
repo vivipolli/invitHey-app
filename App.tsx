@@ -2,6 +2,7 @@ import React from 'react';
 
 import AppLoading from 'expo-app-loading';
 import Parse from 'parse/react-native.js';
+import { Provider } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   useFonts,
@@ -14,6 +15,7 @@ import {
 import { Routes } from './src/routes';
 import { ThemeProvider } from './styled-components';
 import { theme } from './theme';
+import { store } from './src/state';
 
 const YOUR_APPLICATION_ID_HERE = process.env.YOUR_APPLICATION_ID_HERE as string;
 const YOUR_JAVASCRIPT_KEY_HERE = process.env.YOUR_JAVASCRIPT_KEY_HERE;
@@ -34,9 +36,11 @@ export default function App() {
     return <AppLoading />;
   } else {
     return (
-      <ThemeProvider theme={theme}>
-        <Routes />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <Routes />
+        </ThemeProvider>
+      </Provider>
     );
   }
 }

@@ -46,87 +46,86 @@ export default function SignUp() {
 
 
   return (
-    <GlobalApp>
-      <Container>
-        <Form>
-          <Title>Registrar-se</Title>
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            name="name"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Nome"
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-                error={errors.name?.type === 'required'}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            name="username"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Nome de usuário (username)"
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-                error={errors.username?.type === 'required'}
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            rules={{ required: true }}
-            name="email"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput
-                label="Email"
-                onBlur={onBlur}
-                onChangeText={value => onChange(value)}
-                value={value}
-                error={errors.email?.type === 'required'}
-              />
-            )}
-          />
-          <Row>
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              name="password"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Senha"
-                  secureTextEntry
-                  onBlur={onBlur}
-                  onChangeText={value => onChange(value)}
-                  value={value}
-                  error={errors.password?.type === 'required'}
-                  width='48%'
-                />
-              )}
+    <Container>
+      <Form>
+        <Title>Registrar-se</Title>
+        <Controller
+          control={control}
+          rules={{ required: true }}
+          name="name"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Nome"
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+              error={errors.name?.type === 'required'}
             />
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              name="confirmPwd"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  label="Repita a senha"
-                  onBlur={onBlur}
-                  secureTextEntry
-                  onChangeText={value => onChange(value)}
-                  value={value}
-                  error={errors.confirmPwd?.type === 'required'}
-                  width='48%'
-                />
-              )}
+          )}
+        />
+        <Controller
+          control={control}
+          rules={{ required: true }}
+          name="username"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Nome de usuário"
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+              error={errors.username?.type === 'required'}
             />
-          </Row>
-          {/* <Controller
+          )}
+        />
+        <Controller
+          control={control}
+          rules={{ required: true }}
+          name="email"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              label="Email"
+              onBlur={onBlur}
+              onChangeText={value => onChange(value)}
+              value={value}
+              error={errors.email?.type === 'required'}
+            />
+          )}
+        />
+        <Row>
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="password"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Senha"
+                secureTextEntry
+                onBlur={onBlur}
+                onChangeText={value => onChange(value)}
+                value={value}
+                error={errors.password?.type === 'required'}
+                width='48%'
+              />
+            )}
+          />
+          <Controller
+            control={control}
+            rules={{ required: true }}
+            name="confirmPwd"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                label="Repita a senha"
+                onBlur={onBlur}
+                secureTextEntry
+                onChangeText={value => onChange(value)}
+                value={value}
+                error={errors.confirmPwd?.type === 'required'}
+                width='48%'
+              />
+            )}
+          />
+        </Row>
+        {/* <Controller
             control={control}
             rules={{ required: true }}
             name="cellPhone"
@@ -154,19 +153,18 @@ export default function SignUp() {
               />
             )}
           /> */}
-          <Group marginTop={20}>
-            <PrimaryBtn
-              onPress={handleSubmit(onSubmit)}
-              isDefault >
-              Criar conta
-            </PrimaryBtn>
-          </Group>
-        </Form>
-        <TextButton
-          onPress={() => { }}
-          textToInfo="Já tem uma conta?"
-          textToPress="Entrar" />
-      </Container>
-    </GlobalApp>
+        <Group marginTop={20}>
+          <PrimaryBtn
+            onPress={handleSubmit(onSubmit)}
+            isDefault >
+            Criar conta
+          </PrimaryBtn>
+        </Group>
+      </Form>
+      <TextButton
+        onPress={() => navigation.navigate("SignIn")}
+        textToInfo="Já tem uma conta?"
+        textToPress="Entrar" />
+    </Container>
   )
 }

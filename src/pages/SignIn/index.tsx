@@ -85,11 +85,11 @@ export default function SignIn() {
             />
           )}
         />
-        <ButtonReboot>
+        {/* <ButtonReboot>
           <LinkButton isDefault={false}>
             Esqueceu sua senha?
           </LinkButton>
-        </ButtonReboot>
+        </ButtonReboot> */}
 
         <Group>
           <PrimaryBtn
@@ -101,7 +101,7 @@ export default function SignIn() {
         </Group>
       </Form>
       <View>
-        <Group>
+        {/* <Group>
           <BorderSpan />
           <BoldSpan>ou</BoldSpan>
           <BorderSpan />
@@ -117,7 +117,7 @@ export default function SignIn() {
             isDefault={false}
             icon={<FacebookSvg />}
           />
-        </SocialGroup>
+        </SocialGroup> */}
         <ButtonRegister>
           <Text>Não tem conta?</Text>
           <LinkButton

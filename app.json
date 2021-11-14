@@ -16,7 +16,6 @@
     "sdkVersion": "41.0.0",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {

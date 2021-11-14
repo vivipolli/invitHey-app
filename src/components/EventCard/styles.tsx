@@ -17,14 +17,15 @@ export const Card = styled.View`
   margin-top: 10px;
   height: 144px;
   border-radius: 10px;
-  background-color: ${props => props.theme.colors.lightGray};
+  background-color: ${props => props.theme.colors.white};
   padding-right: 16px;
   flex-direction: row;
+  elevation: 1;
 `;
 export const Hold = styled.View`
   flex: 1;
   justify-content: space-around;
-  padding: 5px;
+  padding: 0px;
 `;
 
 // Card Header
@@ -49,13 +50,21 @@ export const EventImage = styled.Image`
 export const TitleHeart = styled.View`
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
+`;
+
+export const HeartIcon = styled.TouchableOpacity`
+  position: absolute;
+  right: -5px;
+  top: 5px;
 `;
 
 export const CardTitle = styled.Text`
   margin-top: 20px;
   margin-left: 16px;
+  max-width: 90%;
   color: ${props => props.theme.colors.darkGray};
-  font-size: ${props => props.theme.typography.smallFont};
+  font-size: ${props => props.theme.typography.smallestFont};
   font-family: ${props => props.theme.typography.medium};
 `;
 

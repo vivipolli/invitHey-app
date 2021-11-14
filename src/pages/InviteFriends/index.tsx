@@ -13,13 +13,13 @@ import SearchInput from '../../components/SearchInput';
 import { Container, PeopleCardList } from './styles';
 import PrimaryBtn from '../../components/PrimaryBtn';
 import { StackParams } from '../../routes/routes.types';
-import { userPointer } from '../../utils/pointers';
+import { eventPointer, userPointer } from '../../utils/pointers';
+import { parsedObject } from '../../utils/parsedObject';
 
 export interface UserProps {
   id: string;
   username: string;
   fullname: string;
-  bio?: string;
 }
 
 export interface GuestProps {
@@ -30,45 +30,58 @@ export interface GuestProps {
   buttonTitle: 'Convidar' | 'Remover';
 }
 
-export function CreateGuest() {
+export function InviteFriends() {
   const [users, setUsers] = useState([] as UserProps[]);
   const [guests, setGuests] = useState([] as GuestProps[]);
   const [filterName, setFilterName] = useState('');
+  const [alreadyInvited, setAlreadyInvited] = useState([]);
 
   const navigation = useNavigation<StackNavigationProp<StackParams>>();
   const route = useRoute();
-  const { event, currentUser }: any = route.params;
-  const eventId = event.objectId
+  const { event, currentUser, peopleConfirmed }: any = route.params;
 
+  const peopleConfirmedId = peopleConfirmed.map((person) => person.objectId);
+  const alreadyConfirmed = new Set(peopleConfirmedId);
+  const eventId = event.objectId
 
   async function inviteUser(user: GuestProps) {
     let Invite: Parse.Object = new Parse.Object('Invite');
 
-    const eventPointer = {
-      __type: 'Pointer',
-      className: 'Event',
-      objectId: event.objectId,
-    }
-
     Invite.set('user', userPointer(user.objectId));
-    Invite.set('inviteBy', currentUser);
-    Invite.set('event', eventPointer);
+    Invite.set('inviteBy', currentUser.objectId);
+    Invite.set('event', eventPointer(event.objectId));
 
     try {
       await Invite.save();
       return true;
-    } catch (error:any) {
+    } catch (error: any) {
       console.info('Error!', error.message);
       return false;
     }
   }
 
+  async function getInvited() {
+    const peopleInviteQuery: Parse.Query = new Parse.Query('Invite');
+    peopleInviteQuery.equalTo('event', eventPointer);
+
+    await peopleInviteQuery
+      .find()
+      .then(async (invites: any) => {
+        const inviteParsed = parsedObject(invites);
+        console.info(inviteParsed);
+        const invitedUser = inviteParsed.map((invite: any) => invite.user.objectId);
+        setAlreadyInvited(invitedUser);
+      }).catch((err) => console.info(err))
+  }
+
+  useEffect(() => {
+    getInvited();
+  }, [])
+
   function handleGuest(user: GuestProps) {
     const invited = guests.findIndex((elem) => elem.username === user.username);
-
     if (invited !== -1) {
-      const field = guests.filter(item => item.username !== user.username);
-      setGuests(field);
+      return
     } else {
       const newGuest = [...guests];
       user.accepted = false;
@@ -89,7 +102,9 @@ export function CreateGuest() {
     return await parseQuery
       .find()
       .then(async (queriedUsers) => {
-        setUsers(queriedUsers as unknown as [UserProps]);
+        const parsedQuery = parsedObject(queriedUsers);
+        const newInviters = parsedQuery.filter((user: any) => !alreadyConfirmed.has(user.objectId));
+        setUsers(newInviters as unknown as [UserProps]);
         return true;
       })
       .catch((error: any) => {
@@ -104,25 +119,9 @@ export function CreateGuest() {
 
   const checkGuest = (user: UserProps) => {
     const invited = guests.findIndex((elem) => elem.username === user.username);
-    if (invited === -1) return 'Add à Lista';
+    const hasInvited = alreadyInvited.includes(user.objectId);
+    if (invited === -1 && !hasInvited) return 'Add à Lista';
     else return 'Convite enviado';
-  };
-
-  const onSubmit = async function (): Promise<boolean> {
-    let Event: Parse.Object = new Parse.Object('Event');
-
-    Event.set('objectId', eventId);
-    Event.set('guests', guests);
-
-    try {
-      await Event.save();
-      Alert.alert('Successo!', 'Lista adicionada');
-      navigation.navigate('Home');
-      return true;
-    } catch (error) {
-      console.info(error)
-      return false;
-    };
   };
 
   return (
@@ -144,11 +143,6 @@ export function CreateGuest() {
           }
           keyExtractor={item => item.id}
         />
-        <PrimaryBtn
-          isDefault
-          onPress={onSubmit} >
-          Salvar
-        </PrimaryBtn>
       </Container>
     </GlobalComponent>
   );

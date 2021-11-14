@@ -59,12 +59,18 @@ export const FavoriteButton = styled(TouchableOpacity).attrs({
   activeOpacity: .8
 })``;
 
+export const ModalContainer = styled.View`
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+`;
+
 export const ModalView = styled.View`
   padding: 16px 24px 0 24px;
-  height: 60.8%;
+  height: 35%;
   margin-top: auto;
-  background-color: #F1F1F1;
-  border-radius: 10px;
+  background-color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 `;
 
 export const Header = styled.View`
@@ -177,9 +183,11 @@ export const Main = styled.View`
 `;
 
 export const MainText = styled.Text`
+  text-align: left;
+  
   ${(props) => {
   return `
-    color: ${props.theme.colors.darkGray};
+    color: ${props.theme.colors.secondary};
     font-family: ${props.theme.typography.regular}; 
     font-size: ${props.theme.typography.smallFont};
 `
@@ -190,7 +198,6 @@ export const MainOption = styled(TouchableOpacity).attrs({
   activeOpacity: .7
 })`
   justify-content: space-between;
-  border: 1px solid #E7E8E9;
   padding: 13px;
   margin-bottom: 8px;
   flex-direction: row;

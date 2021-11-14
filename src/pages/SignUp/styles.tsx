@@ -10,7 +10,7 @@ export const Container = styled.View`
   flex: 1;
   justify-content: space-around;
   align-items: center;
-  padding: 10px;
+  padding: 50px 20px;
 
 `
 

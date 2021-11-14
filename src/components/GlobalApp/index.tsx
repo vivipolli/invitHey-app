@@ -19,8 +19,9 @@ export default function GlobalComponent({ children, route }: GlobalAppProps) {
       Profile: "Meu perfil",
       Event: "Evento",
       Favorites: "Interesses",
-      Invites: "Convites",
+      Notifications: "Notificações",
       ConfirmedPeople: "Comparecerão",
+      SignUp: "Login"
     }
 
     return routes[route];

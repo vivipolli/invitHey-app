@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { Alert, RefreshControl, View } from 'react-native';
 import Parse from 'parse/react-native';
+import { useDispatch } from 'react-redux';
 
 
 import {
@@ -19,6 +20,8 @@ import { ListSpace } from '../Profile/styles';
 import { EventProps } from '../Event';
 import { refresh } from '../../utils/refresh';
 import { Loading } from '../../components/Loading';
+import { UserInfo } from '../../state/types/user.types';
+import { currentUserAction } from '../../state/actions/user.action';
 
 export default function Home() {
   const filter = {
@@ -28,45 +31,71 @@ export default function Home() {
     proximity: 'proximity',
   }
 
-  const [filterActive, setFilterActive] = useState('all');
+  const [filterActive, setFilterActive] = useState('recent');
   const [events, setEvents] = useState([] as EventProps[]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [filterEvent, setFilterEvent] = useState('');
+
+  const dispatch = useDispatch();
+
+  const getUserData = async function () {
+    const currentUser = await Parse.User.currentAsync() as unknown as UserInfo;
+    const userParsed = parsedObject(currentUser);
+    dispatch(currentUserAction(userParsed));
+  };
 
   function handleFilterActive(type: string) {
     setFilterActive(type);
   }
 
-  const getEvents = async function () {
+  const filterEvents = async function (): Promise<Boolean> {
+    const userFilter: string = filterEvent;
     const parseQuery: Parse.Query = new Parse.Query('Event');
-    try {
-      const eventsList = await parseQuery.find() as unknown as EventProps[];
-      setEvents(eventsList);
-      return true;
-    } catch (error: any) {
-      Alert.alert('Error!', error.message);
-      return false;
-    } finally {
-      setLoading(false);
-    };
-  }
+
+    if (userFilter !== '') {
+      parseQuery.contains('name', userFilter);
+      parseQuery.matches('name', userFilter as unknown as RegExp, 'i');
+    }
+
+    return await parseQuery.find()
+      .then(async (queriedEvents) => {
+        const eventsParsed = parsedObject(queriedEvents);
+        const publicEvents = eventsParsed.filter((event: any) => event.type === "public");
+        setEvents(publicEvents);
+        setLoading(false);
+        return true;
+      })
+      .catch((error: any) => {
+        Alert.alert('Error!', error.message);
+        setLoading(false);
+        return false;
+      });
+  };
 
   const onRefresh = React.useCallback(() => {
     setRefreshing(true);
-    getEvents();
+    filterEvents();
     refresh(2000).then(() => setRefreshing(false));
   }, []);
 
   useEffect(() => {
-    getEvents();
+    getUserData()
   }, []);
+
+  useEffect(() => {
+    filterEvents()
+  }, [filterEvent]);
 
 
   return (
     <View style={{ flex: 1 }}>
       <HeaderHome />
       <Container>
-        <SearchInput placeholder='Pesquise por evento, local ou interesse' />
+        <SearchInput
+          value={filterEvent} onChangeText={(value) => setFilterEvent(value)}
+          placeholder='Pesquisar eventos'
+        />
         <View>
           <FilterButtonList >
             <TagButton

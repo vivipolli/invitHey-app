@@ -9,6 +9,18 @@ import * as Routes from '../pages';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+
+const NotificationsRoutes = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Notifications" component={Routes.Notifications} />
+      <Stack.Screen name="Event" component={Routes.Event} />
+      <Stack.Screen name="InviteFriends" component={Routes.InviteFriends} />
+      <Stack.Screen name="ConfirmedPeople" component={Routes.ConfirmedPeople} />
+    </Stack.Navigator>
+  )
+};
+
 const CreateEventRoutes = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -24,6 +36,8 @@ const ProfileRoutes = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Profile" component={Routes.Profile} />
       <Stack.Screen name="Event" component={Routes.Event} />
+      <Stack.Screen name="InviteFriends" component={Routes.InviteFriends} />
+      <Stack.Screen name="ConfirmedPeople" component={Routes.ConfirmedPeople} />
     </Stack.Navigator>
   )
 };
@@ -33,8 +47,8 @@ const EventsRoutes = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Routes.Home} />
       <Stack.Screen name="Event" component={Routes.Event} />
+      <Stack.Screen name="InviteFriends" component={Routes.InviteFriends} />
       <Stack.Screen name="ConfirmedPeople" component={Routes.ConfirmedPeople} />
-
     </Stack.Navigator>
   )
 };
@@ -45,9 +59,9 @@ export function Tabs() {
       screenOptions={{
         tabBarInactiveTintColor: '#898D9A',
         tabBarActiveTintColor: '#FF7527',
-        tabBarShowLabel: false,    
+        tabBarShowLabel: false,
       }}
-      
+
     >
       <Tab.Screen
         name='EventsRoutes'
@@ -64,8 +78,8 @@ export function Tabs() {
         }}
       />
       <Tab.Screen
-        name='Interesses'
-        component={Routes.Invites}
+        name='NotificationsRoutes'
+        component={NotificationsRoutes}
         options={{
           headerShown: false,
           tabBarIcon: (({ size, color }) => (
